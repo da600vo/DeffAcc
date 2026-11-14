@@ -3,7 +3,7 @@ flowchart LR
   subgraph CS["GitHub Codespace · Linux en el navegador"]
     N8N["<b>n8n</b> · puerto 5678<br/>orquestación y demo<br/>n8n/flujo.json"]:::adrian
     API["<b>api.py</b> · FastAPI + uvicorn<br/>puerto 8000<br/>/scan /patch /verify /health"]:::david
-    SC["<b>scan_baseline.py</b><br/>reglas CodeShield + semgrep<br/>división por repo, semilla 42"]:::base
+    SC["<b>scan_baseline.py</b><br/>ICD de CodeShield<br/>regex + semgrep 1.79.0<br/>división por repo, semilla 42"]:::base
     PA["<b>patch.py</b><br/>google-genai · clave en .env"]:::leandro
     VE["<b>verify.py</b><br/>ast + re-escaneo + anti-trampa"]:::antonia
     FS[("results/ · cache/patches/<br/>salidas versionadas")]:::base
