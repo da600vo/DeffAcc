@@ -196,7 +196,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "http://127.0.0.1:8000/patch",
+        "url": "http://127.0.0.1:8001/patch",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify({ code: $('Entrada').item.json.code, findings: $json.findings }) }}",
