@@ -2,7 +2,7 @@
   "name": "CyberElotes - Parche Verificado",
   "nodes": [
     {
-      "id": "736d64d7-7250-4fbb-85c6-e6bdfd2d254c",
+      "id": "d46061b7-6d6a-40f2-a501-5c34bf02f82a",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -13,7 +13,7 @@
       "parameters": {}
     },
     {
-      "id": "29d543ef-0086-47b7-b531-c9c7a485d6dd",
+      "id": "d1a310cb-0a52-4da8-8dc8-3c4005044b33",
       "name": "Ejemplos demo",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -22,11 +22,11 @@
         0
       ],
       "parameters": {
-        "jsCode": "// Cuatro casos de demo. Cada uno termina en una salida distinta.\n// demo_patch solo lo usa la API simulada para elegir el parche; la API real lo ignora.\nconst original = \"import os\\n\\ndef ping(host):\\n    os.system(\\\"ping -c 1 \\\" + host)\\n    return True\\n\";\nconst limpio = \"import subprocess\\n\\ndef ping(host):\\n    subprocess.run([\\\"ping\\\", \\\"-c\\\", \\\"1\\\", host], check=False)\\n    return True\\n\";\nreturn [\n  { json: { skill_id: 'demo-1-limpia',        code: limpio,   language: 'python' } },                              // -> APROBADO\n  { json: { skill_id: 'demo-2-ping-arreglado', code: original, language: 'python', demo_patch: 'fixed' } },          // -> PARCHE PROPUESTO\n  { json: { skill_id: 'demo-3-ping-trampa',    code: original, language: 'python', demo_patch: 'fake_fix' } },       // -> CUARENTENA\n  { json: { skill_id: 'demo-4-ping-inseguro',  code: original, language: 'python', demo_patch: 'still_insecure' } }, // -> CUARENTENA\n];"
+        "jsCode": "// Cuatro casos de demo. Cada uno termina en una salida distinta.\n// method elige el parcheador: gemini (nuestro) o las líneas base de la evaluación (delete_line, noop).\nconst original = \"import os\\n\\ndef ping(host):\\n    os.system(\\\"ping -c 1 \\\" + host)\\n    return True\\n\";\nconst limpio = \"import subprocess\\n\\ndef ping(host):\\n    subprocess.run([\\\"ping\\\", \\\"-c\\\", \\\"1\\\", host], check=False)\\n    return True\\n\";\nreturn [\n  { json: { skill_id: 'demo-1-limpia',        code: limpio,   language: 'python' } },                              // -> APROBADO (sin hallazgos)\n  { json: { skill_id: 'demo-2-ping-arreglado', code: original, language: 'python', method: 'gemini' } },             // gemini -> PARCHE PROPUESTO si verify da fixed\n  { json: { skill_id: 'demo-3-ping-trampa',    code: original, language: 'python', method: 'delete_line' } },        // borra la línea -> verify: fake_fix -> CUARENTENA\n  { json: { skill_id: 'demo-4-ping-inseguro',  code: original, language: 'python', method: 'noop' } },               // no cambia nada -> verify: still_insecure -> CUARENTENA\n];"
       }
     },
     {
-      "id": "72f4f5ca-495e-4ebf-8ff5-16c30f4e3383",
+      "id": "87ea3639-4bc4-4648-95f2-cff5da0ae34c",
       "name": "Webhook /revisar-skill",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -34,7 +34,7 @@
         220,
         220
       ],
-      "webhookId": "d4c12a1e-b484-467e-9834-a4b4ee7be288",
+      "webhookId": "54a1c101-d302-43a9-bbb7-e52f644dcbd3",
       "parameters": {
         "httpMethod": "POST",
         "path": "revisar-skill",
@@ -43,7 +43,7 @@
       }
     },
     {
-      "id": "fa590a34-c75f-48c1-a1dc-f1d749bcbba6",
+      "id": "c6d44c5a-b413-4a1b-a04b-35cce65c7214",
       "name": "Entrada",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -52,12 +52,12 @@
         100
       ],
       "parameters": {
-        "jsCode": "// Normaliza la entrada: el Webhook la trae en body; los ejemplos, en la raíz.\nconst src = $json.body ?? $json;\nif (!src.code) throw new Error('Falta \"code\" en la entrada');\nreturn { json: {\n  skill_id: src.skill_id ?? 'sin-id',\n  code: src.code,\n  language: src.language ?? 'python',\n  demo_patch: src.demo_patch ?? null,\n} };",
+        "jsCode": "// Normaliza la entrada: el Webhook la trae en body; los ejemplos, en la raíz.\nconst src = $json.body ?? $json;\nif (!src.code) throw new Error('Falta \"code\" en la entrada');\nreturn { json: {\n  skill_id: src.skill_id ?? 'sin-id',\n  code: src.code,\n  language: src.language ?? 'python',\n  method: src.method ?? 'gemini',\n} };",
         "mode": "runOnceForEachItem"
       }
     },
     {
-      "id": "956c3c80-2120-4084-b8ed-9a1e06dc0459",
+      "id": "62eed4e3-55ed-458d-a798-0d4d3f573736",
       "name": "POST /scan",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -77,7 +77,7 @@
       }
     },
     {
-      "id": "4232bc58-fe74-4257-a6b4-b3dbbaa6f083",
+      "id": "abc3b36a-fe09-4da8-9cf5-65a6f19f78d8",
       "name": "¿Marcado?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -96,7 +96,7 @@
           "combinator": "and",
           "conditions": [
             {
-              "id": "b0744719-2760-434b-ab04-f31333542232",
+              "id": "a69f7b87-91f7-4d9d-b852-f533bd022e26",
               "leftValue": "={{ $json.flagged }}",
               "rightValue": "",
               "operator": {
@@ -111,13 +111,13 @@
       }
     },
     {
-      "id": "6487f672-0202-4aff-a56f-b699b6c348ae",
+      "id": "f4d8057d-8ccd-4cc3-86ee-1f7afa21914b",
       "name": "APROBADO",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1100,
-        300
+        1320,
+        320
       ],
       "parameters": {
         "jsCode": "const e = $('Entrada').item.json;\nreturn { json: {\n  skill_id: e.skill_id,\n  decision: 'aprobado',\n  motivo: 'el escáner no encontró prácticas inseguras',\n  findings: [],\n} };",
@@ -125,32 +125,93 @@
       }
     },
     {
-      "id": "06112ca3-47d8-4035-b754-f37134404316",
+      "id": "bee16c9e-afd9-4ab9-9720-37c126c2df68",
+      "name": "¿Gemini?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "8126bef1-d173-4296-8e79-5ce28d21fcea",
+              "leftValue": "={{ $('Entrada').item.json.method }}",
+              "rightValue": "gemini",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5d984c2d-1b0a-491f-8762-3a6ddf0f2b15",
+      "name": "Línea base (noop / delete_line)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        120
+      ],
+      "parameters": {
+        "jsCode": "// Líneas base de la evaluación, igual que baseline_patches.py:\n//  noop        -> deja el código igual\n//  delete_line -> borra la(s) línea(s) marcada(s) por el escáner (silencia al escáner, no arregla nada)\nconst e = $('Entrada').item.json;\nconst s = $('POST /scan').item.json;\nconst lines = e.code.split('\\n');\nlet patched = e.code;\nif (e.method === 'delete_line') {\n  const targets = new Set(s.findings.map(f => (lines[f.line - 1] ?? '').trim()).filter(t => t));\n  patched = lines.filter(l => !targets.has(l.trim())).join('\\n');\n}\nreturn { json: { patched_code: patched, model: e.method } };",
+        "mode": "runOnceForEachItem"
+      }
+    },
+    {
+      "id": "36465937-1ab7-4607-8942-382d5d1e46d9",
+      "name": "Parche",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Une las dos ramas (Gemini o línea base) en un solo formato: {patched_code, model}\nreturn { json: { patched_code: $json.patched_code, model: $json.model } };",
+        "mode": "runOnceForEachItem"
+      }
+    },
+    {
+      "id": "4a71c396-af85-4276-9005-849b0ef8776e",
       "name": "POST /patch",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1100,
-        0
+        1320,
+        -120
       ],
       "parameters": {
         "method": "POST",
         "url": "http://127.0.0.1:8000/patch",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ code: $('Entrada').item.json.code, findings: $json.findings, demo_patch: $('Entrada').item.json.demo_patch }) }}",
+        "jsonBody": "={{ JSON.stringify({ code: $('Entrada').item.json.code, findings: $json.findings }) }}",
         "options": {
           "timeout": 120000
         }
       }
     },
     {
-      "id": "337c0f0d-975b-4f0c-920e-6a02952c4c1f",
+      "id": "dcb0b466-9716-419f-8270-09d6abb2fee2",
       "name": "POST /verify",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1320,
+        1760,
         0
       ],
       "parameters": {
@@ -165,12 +226,12 @@
       }
     },
     {
-      "id": "1d72a7c7-5ae5-483d-a311-92ad31864c67",
+      "id": "2d983a25-fbf3-4e4d-ac10-3e64b501149e",
       "name": "Estado",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1540,
+        1980,
         0
       ],
       "parameters": {
@@ -187,7 +248,7 @@
                 "combinator": "and",
                 "conditions": [
                   {
-                    "id": "58a463d7-38e0-4c66-8e65-6fb7c21ca914",
+                    "id": "67731ae7-5eef-4bd5-abdf-c672343f65fd",
                     "leftValue": "={{ $json.status }}",
                     "rightValue": "fixed",
                     "operator": {
@@ -211,7 +272,7 @@
                 "combinator": "or",
                 "conditions": [
                   {
-                    "id": "56b2d463-29a2-47cc-bdfa-483cfafc87df",
+                    "id": "0bf18ec3-a901-4314-929e-d441a2d6a91a",
                     "leftValue": "={{ $json.status }}",
                     "rightValue": "fake_fix",
                     "operator": {
@@ -220,7 +281,7 @@
                     }
                   },
                   {
-                    "id": "8176dd56-0974-4b23-b1c8-b4df0758754b",
+                    "id": "6c724215-58ba-49c1-a207-cc5fbe37784b",
                     "leftValue": "={{ $json.status }}",
                     "rightValue": "still_insecure",
                     "operator": {
@@ -229,7 +290,7 @@
                     }
                   },
                   {
-                    "id": "4c068818-8fec-4b22-9542-521a8e71022a",
+                    "id": "3a14f8ef-d1eb-45cc-9ec3-f11ea507b6db",
                     "leftValue": "={{ $json.status }}",
                     "rightValue": "broken_syntax",
                     "operator": {
@@ -251,40 +312,40 @@
       }
     },
     {
-      "id": "2d1506d4-a683-4493-b410-3da51f6bdfcc",
+      "id": "8aadb876-6a8e-40ae-aae5-295fdff31e06",
       "name": "PARCHE PROPUESTO",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1780,
+        2220,
         -100
       ],
       "parameters": {
-        "jsCode": "function diff(a, b) {\n  const A = a.split('\\n'), B = b.split('\\n');\n  return [\n    ...A.filter(l => l.trim() && !B.includes(l)).map(l => '- ' + l),\n    ...B.filter(l => l.trim() && !A.includes(l)).map(l => '+ ' + l),\n  ];\n}\nconst e = $('Entrada').item.json;\nconst s = $('POST /scan').item.json;\nconst p = $('POST /patch').item.json;\nconst v = $json;\nreturn { json: {\n  skill_id: e.skill_id,\n  decision: 'parche_propuesto',\n  aplicado: false,\n  cwe: [...new Set(s.findings.map(f => f.cwe))],\n  findings: s.findings,\n  model: p.model,\n  diff: diff(e.code, p.patched_code),\n  patched_code: p.patched_code,\n  verificacion: { status: v.status, reasons: v.reasons, original_parses: v.original_parses },\n} };",
+        "jsCode": "function diff(a, b) {\n  const A = a.split('\\n'), B = b.split('\\n');\n  return [\n    ...A.filter(l => l.trim() && !B.includes(l)).map(l => '- ' + l),\n    ...B.filter(l => l.trim() && !A.includes(l)).map(l => '+ ' + l),\n  ];\n}\nconst e = $('Entrada').item.json;\nconst s = $('POST /scan').item.json;\nconst p = $('Parche').item.json;\nconst v = $json;\nreturn { json: {\n  skill_id: e.skill_id,\n  decision: 'parche_propuesto',\n  aplicado: false,\n  cwe: [...new Set(s.findings.map(f => f.cwe))],\n  findings: s.findings,\n  model: p.model,\n  diff: diff(e.code, p.patched_code),\n  patched_code: p.patched_code,\n  verificacion: { status: v.status, reasons: v.reasons, original_parses: v.original_parses },\n} };",
         "mode": "runOnceForEachItem"
       }
     },
     {
-      "id": "daab705d-3116-4bc8-bf40-aa7d48dc82aa",
+      "id": "5c8985a7-d61c-4b4b-badb-da4a97fc9af1",
       "name": "CUARENTENA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1780,
+        2220,
         120
       ],
       "parameters": {
-        "jsCode": "function diff(a, b) {\n  const A = a.split('\\n'), B = b.split('\\n');\n  return [\n    ...A.filter(l => l.trim() && !B.includes(l)).map(l => '- ' + l),\n    ...B.filter(l => l.trim() && !A.includes(l)).map(l => '+ ' + l),\n  ];\n}\nconst e = $('Entrada').item.json;\nconst s = $('POST /scan').item.json;\nconst p = $('POST /patch').item.json;\nconst v = $json;\nreturn { json: {\n  skill_id: e.skill_id,\n  decision: 'cuarentena',\n  motivo: v.status ?? 'estado_desconocido',\n  accion: 'revisión de especialista; el parche NO se aplica',\n  evidencia: {\n    cwe: [...new Set(s.findings.map(f => f.cwe))],\n    findings: s.findings,\n    reasons: v.reasons ?? [],\n    original_parses: v.original_parses,\n    model: p.model,\n    diff: diff(e.code, p.patched_code ?? ''),\n    original_code: e.code,\n    patched_code: p.patched_code,\n  },\n} };",
+        "jsCode": "function diff(a, b) {\n  const A = a.split('\\n'), B = b.split('\\n');\n  return [\n    ...A.filter(l => l.trim() && !B.includes(l)).map(l => '- ' + l),\n    ...B.filter(l => l.trim() && !A.includes(l)).map(l => '+ ' + l),\n  ];\n}\nconst e = $('Entrada').item.json;\nconst s = $('POST /scan').item.json;\nconst p = $('Parche').item.json;\nconst v = $json;\nreturn { json: {\n  skill_id: e.skill_id,\n  decision: 'cuarentena',\n  motivo: v.status ?? 'estado_desconocido',\n  accion: 'revisión de especialista; el parche NO se aplica',\n  evidencia: {\n    cwe: [...new Set(s.findings.map(f => f.cwe))],\n    findings: s.findings,\n    reasons: v.reasons ?? [],\n    original_parses: v.original_parses,\n    model: p.model,\n    diff: diff(e.code, p.patched_code ?? ''),\n    original_code: e.code,\n    patched_code: p.patched_code,\n  },\n} };",
         "mode": "runOnceForEachItem"
       }
     },
     {
-      "id": "6cc7785c-f02b-40cc-8523-fb2a5bd7152e",
+      "id": "bd9c6ce0-bf5c-43be-af94-0564bd299a2e",
       "name": "Responder JSON",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        2020,
+        2460,
         100
       ],
       "parameters": {
@@ -353,7 +414,7 @@
       "main": [
         [
           {
-            "node": "POST /patch",
+            "node": "¿Gemini?",
             "type": "main",
             "index": 0
           }
@@ -367,7 +428,47 @@
         ]
       ]
     },
+    "¿Gemini?": {
+      "main": [
+        [
+          {
+            "node": "POST /patch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Línea base (noop / delete_line)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "POST /patch": {
+      "main": [
+        [
+          {
+            "node": "Parche",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Línea base (noop / delete_line)": {
+      "main": [
+        [
+          {
+            "node": "Parche",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parche": {
       "main": [
         [
           {
