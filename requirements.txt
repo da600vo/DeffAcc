@@ -1,0 +1,5 @@
+codeshield
+google-genai
+fastapi
+uvicorn
+python-dotenv
