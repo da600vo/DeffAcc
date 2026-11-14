@@ -11,6 +11,7 @@ Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
 | `scan_dir` del escáner oficial no devuelve la línea, y la regla anti-trampa la necesita | El verificador toma la línea del propio ICD. Coincidió con la línea del dataset en 15 de 15 casos revisados |
 | La severidad del escáner no sirve para priorizar: los 125 hallazgos de dev son `warning` | La prioridad usa el CWE Top 25 de MITRE 2025 |
 | El rol pedía fabricar parches tramposos, y un catálogo de evasión es material de doble uso | Tres controles en su lugar: líneas base como parches falsos sembrados, pruebas de conformidad con la tabla 3.2 y auditoría ciega |
+| Leandro encontró dos parches reales de Gemini (dev 1601 y 1615) que el verificador aprobaba aunque usan nombres que nadie define | PR #4: regla 4d, `undefined_name`. Lee con el tokenizador porque solo 27 de los 85 originales de dev compilan. Falta probarla con esos dos parches, que aún no están en el repo |
 
 ## Resultados en dev (85 marcados)
 
@@ -24,6 +25,10 @@ Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
 | Secretos en la evidencia | Tapados en los 13 casos que los tienen en la línea marcada |
 
 Pendiente: cuarentena y auditoría con los parches de Gemini.
+
+## Caso donde el sistema falla (la plantilla de la ficha lo pide)
+
+El verificador aprobaba como `fixed` parches que cambian la línea insegura por código que usa nombres sin definir: una función inventada o un módulo sin importar. El escáner calla, la línea sigue ahí y las funciones siguen definidas, así que ninguna regla saltaba. Lo encontró Leandro revisando parches reales de dev. Quedó convertido en una regla nueva con 16 pruebas (PR #4).
 
 ## Límites que quedan
 
