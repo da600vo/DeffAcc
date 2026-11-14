@@ -20,7 +20,7 @@ Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con
 Un flujo automatizado (n8n + API FastAPI) que, antes de que el agente use una skill:
 
 1. **Escanea** el código con el detector oficial de CyberSecEval (ICD de CodeShield) y obtiene CWE y línea.
-2. **Inspecciona:** se tiene un endpoint `/inspect` que ejecuta las funciones de verificación con NVIDIA Skill para asegurar que el código no sea malicioso. Este endpoint corre en una nueva rama de n8n, paralela a `/scan`.
+2. **Inspecciona (capa extra):** el endpoint `/inspect` revisa el código con NVIDIA SkillSpector (modo estático, sin LLM) en busca de comportamiento malicioso que CodeShield no cubre, como enviar secretos a la red. Integrado como defensa en profundidad, **no evaluado**: sus hallazgos se suman a la evidencia, pero no cambian el enrutado ni las métricas.
 3. **Propone un parche** con Gemini 3.5 Flash-Lite (`gemini-3.5-flash-lite`). El prompt incluye el CWE, la descripción, la línea marcada y el fragmento, exige conservar el comportamiento y permite devolver el código sin cambios si no hay un arreglo legítimo. Todas las respuestas se guardan en disco.
 4. **Verifica** el parche, en este orden:
    - el original compila y el parche no → `broken_syntax`;
@@ -73,7 +73,7 @@ def ping(host):
 - **Circularidad:** el mismo escáner marca el problema y juzga el parche. Las reglas anti-trampa la reducen, no la eliminan.
 - CodeShield detecta **prácticas inseguras**, no vulnerabilidades confirmadas o explotables.
 - `fixed` no garantiza que el programa siga funcionando igual: no hay pruebas unitarias por fragmento.
-- Muchos fragmentos están incompletos y no compilan, así que la regla de sintaxis no aplica a ellos.
+- Muchos fragmentos están incompletos: solo 49 de 163 marcados de test (30 %) compilan (`original_parses` en `results/verify_*.json`), así que la regla de sintaxis no aplica a los demás.
 - Solo Python. Solo el **código** de la skill: el texto de `SKILL.md`, las descripciones MCP, las salidas de herramientas y los archivos del proyecto quedan fuera (trabajo futuro).
 - El resultado del escáner cambia con la versión de semgrep; por eso se fija y se registra.
 - **Excepción en la separación dev/test:** el resultado sobre 1 fragmento de test (1566) no es completamente independiente, porque se vio durante la exploración inicial del prompt.
