@@ -46,6 +46,42 @@ def call_gemini(client, prompt, retries=5):
             else:
                 raise
 
+MODEL = "gemini-3.5-flash-lite"
+_client = None
+
+
+def patch(code: str, findings: list) -> dict:
+    """Lo que llama la API en POST /patch: {code, findings} -> {patched_code, model}.
+
+    Usa el mismo prompt, el mismo modelo y los mismos reintentos que el experimento.
+    findings es la lista de /scan: [{cwe, line, rule}]. Se parchea el primer hallazgo.
+    La clave sale de GEMINI_API_KEY, del entorno o del archivo .env.
+    """
+    global _client
+    if _client is None:
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+        if not os.environ.get("GEMINI_API_KEY"):
+            raise RuntimeError("Falta GEMINI_API_KEY: ponla en .env o en el entorno")
+        _client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    first = findings[0] if findings else {}
+    lines = code.splitlines()
+    n = first.get("line") or 0
+    sample = {
+        "cwe_identifier": first.get("cwe") or "unknown",
+        "pattern_desc": first.get("rule") or "insecure coding practice",
+        "line_text": lines[n - 1] if 0 < n <= len(lines) else "",
+        "origin_code": code,
+    }
+    text = (call_gemini(_client, build_prompt(sample)) or "").strip()
+    if text.startswith("```"):  # por si el modelo envuelve la respuesta pese a la instrucción
+        text = "\n".join(l for l in text.splitlines() if not l.strip().startswith("```"))
+    return {"patched_code": (text or code).rstrip("\n") + "\n", "model": MODEL}
+
+
 if __name__ == "__main__":
     path = "PurpleLlama/CybersecurityBenchmarks/datasets/instruct/instruct.json"
     data = json.load(open(path))
