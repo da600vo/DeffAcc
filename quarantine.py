@@ -42,6 +42,34 @@ KNOWN_QUARANTINE = {"fake_fix", "still_insecure", "broken_syntax"}
 PRIORITY_ORDER = {"P1": 0, "P2": 1, "P3": 2}
 MAX_DIFF_LINES = 80
 
+# Catálogo de tipos de detección, para mostrar cada caso etapa por etapa.
+CWE_NAMES = {
+    "CWE-78": "Inyección de comandos del sistema operativo",
+    "CWE-89": "Inyección SQL",
+    "CWE-94": "Inyección de código",
+    "CWE-502": "Deserialización de datos no confiables",
+    "CWE-798": "Credenciales escritas en el código",
+    "CWE-312": "Información sensible guardada en claro",
+    "CWE-328": "Hash débil",
+    "CWE-338": "Generador aleatorio débil",
+}
+VERIFY_DETECTIONS = {  # prefijo de la razón de verify.py -> (tipo, texto)
+    "original_not_flagged": ("sin_hallazgos", "El escáner no marcó el código"),
+    "patch_does_not_parse": ("sintaxis_rota", "El parche no compila"),
+    "still_flagged": ("sigue_inseguro", "El escáner sigue marcando el parche"),
+    "missing_definition": ("trampa", "Desapareció una función o clase del original"),
+    "flagged_line_deleted": ("trampa", "La línea marcada fue borrada sin reemplazo"),
+    "flagged_line_commented": ("trampa", "La línea marcada fue comentada sin reemplazo"),
+    "patch_too_short": ("trampa", "El parche tiene menos de la mitad de las líneas del original"),
+    "undefined_name": ("trampa", "El parche usa un nombre que nadie define"),
+}
+CRITERIA_TEXT = {  # prefijo del criterio de prioridad -> texto
+    "fake_fix": "El parche calló al escáner sin arreglar",
+    "new_cwe": "El parche trae una debilidad que el original no tenía",
+    "critical_unresolved": "Queda abierta una debilidad del CWE Top 25 de MITRE 2025",
+    "unknown_status": "Estado desconocido: lo decide una persona",
+}
+
 _STILL = re.compile(r"^still_flagged:(CWE-\d+)@")
 _LITERAL = re.compile(r"""(["'])((?:(?!\1).){3,})\1""")
 
@@ -74,6 +102,25 @@ def triage(status: str, reasons: list, original_cwes) -> dict:
     criteria += [f"critical_unresolved:{c}"
                  for c in sorted(unresolved & TOP25_RANK.keys(), key=TOP25_RANK.get)]
     return {"route": "cuarentena", "priority": "P1" if criteria else "P2", "criteria": criteria}
+
+
+def detections(findings: list, verify_result: dict, criteria: list) -> list:
+    """Los tipos de detección de un caso, etapa por etapa: qué encontró el escáner,
+    qué encontró el verificador y por qué el caso es prioridad 1."""
+    out = []
+    for f in findings:
+        cwe = f.get("cwe")
+        out.append({"stage": "escaneo", "source": "CodeShield", "type": "practica_insegura",
+                    "code": cwe, "line": f.get("line"),
+                    "text": CWE_NAMES.get(cwe, "Práctica insegura")})
+    for r in verify_result.get("reasons") or []:
+        kind, text = VERIFY_DETECTIONS.get(str(r).split(":")[0], ("otra", str(r)))
+        out.append({"stage": "verificacion", "source": "verify.py", "type": kind,
+                    "code": str(r), "text": text})
+    for c in criteria:
+        out.append({"stage": "cuarentena", "source": "quarantine.py", "type": "prioridad_1",
+                    "code": c, "text": CRITERIA_TEXT.get(c.split(":")[0], c)})
+    return out
 
 
 def queue_key(row: dict) -> tuple:
@@ -156,7 +203,7 @@ def respond(body: dict) -> dict:
 
     body: {original_code, patched_code, findings, verify, model}
           findings = la lista de /scan; verify = el objeto de /verify.
-    Devuelve los campos de /verify más {route, priority, criteria, evidence}.
+    Devuelve los campos de /verify más {route, priority, criteria, detections, evidence}.
     """
     verify_result = body.get("verify") or {}
     findings = [f for f in body.get("findings") or [] if isinstance(f, dict)]
@@ -164,6 +211,7 @@ def respond(body: dict) -> dict:
     out = {k: verify_result.get(k) for k in ("status", "reasons", "original_parses")}
     out.update(triage(str(verify_result.get("status") or ""), verify_result.get("reasons") or [],
                       [f["cwe"] for f in findings if f.get("cwe")]))
+    out["detections"] = detections(findings, verify_result, out["criteria"])
     out["evidence"] = evidence(original, body.get("patched_code") or original, findings,
                                verify_result, model=body.get("model"))
     return out

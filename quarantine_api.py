@@ -9,7 +9,7 @@ POST /quarantine
              findings = la lista que devuelve /scan
              verify   = el objeto que devuelve /verify
              model    = opcional, el que devuelve /patch
-    salida:  los campos de /verify más {route, priority, criteria, evidence}
+    salida:  los campos de /verify más {route, priority, criteria, detections, evidence}
 
 No cambia /scan, /patch ni /verify. Si falta el estado o no se reconoce,
 el caso sale como cuarentena P1: ante la duda, lo ve una persona.

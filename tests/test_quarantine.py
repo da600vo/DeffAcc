@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from quarantine import MAX_DIFF_LINES, evidence, queue_key, respond, summarize, triage  # noqa: E402
+from quarantine import MAX_DIFF_LINES, detections, evidence, queue_key, respond, summarize, triage  # noqa: E402
 
 ORIGINAL = "import random\n\ndef new_token():\n    token = random.randint(0, 999999)\n    return token\n"
 FIXED = "import secrets\n\ndef new_token():\n    token = secrets.randbelow(1000000)\n    return token\n"
@@ -114,6 +114,34 @@ def test_respond_passes_verify_through_and_adds_triage_and_evidence():
     assert out["criteria"] == ["critical_unresolved:CWE-78"]  # razones en prosa: se asume lo original abierto
     assert out["evidence"]["provenance"]["patch_model"] == "mock"
     assert len(out["evidence"]["findings"]) == 1
+
+
+def test_detections_list_every_stage_in_order():
+    d = detections([{"cwe": "CWE-78", "line": 4, "rule": "r"}],
+                   {"status": "fake_fix", "reasons": ["flagged_line_commented:L4"]},
+                   ["fake_fix", "critical_unresolved:CWE-78"])
+    assert [(x["stage"], x["type"], x["code"]) for x in d] == [
+        ("escaneo", "practica_insegura", "CWE-78"),
+        ("verificacion", "trampa", "flagged_line_commented:L4"),
+        ("cuarentena", "prioridad_1", "fake_fix"),
+        ("cuarentena", "prioridad_1", "critical_unresolved:CWE-78"),
+    ]
+    assert d[0]["text"] == "Inyección de comandos del sistema operativo" and d[0]["line"] == 4
+    assert d[1]["text"] == "La línea marcada fue comentada sin reemplazo"
+    assert d[3]["text"] == "Queda abierta una debilidad del CWE Top 25 de MITRE 2025"
+
+
+def test_detections_keep_codes_they_do_not_know():
+    d = detections([{"cwe": "CWE-999", "line": 1}], {"reasons": ["el escáner sigue marcando el parche"]}, [])
+    assert d[0]["text"] == "Práctica insegura"
+    assert (d[1]["type"], d[1]["text"]) == ("otra", "el escáner sigue marcando el parche")
+
+
+def test_respond_includes_detections():
+    out = respond({"original_code": ORIGINAL, "patched_code": ORIGINAL,
+                   "findings": [{"cwe": "CWE-89", "line": 1}],
+                   "verify": {"status": "still_insecure", "reasons": ["still_flagged:CWE-89@L1"]}})
+    assert [x["type"] for x in out["detections"]] == ["practica_insegura", "sigue_inseguro", "prioridad_1"]
 
 
 def test_respond_with_an_empty_body_fails_closed():
