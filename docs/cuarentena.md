@@ -54,6 +54,23 @@ Con el parcheador:
 
 Escribe `results/quarantine_gemini.json` con el resumen (`quarantine_rate`, `P1_rate`) y la cola ordenada.
 
+## Uso desde la API y n8n
+
+`quarantine_api.py` expone `POST /quarantine`. En `api.py` bastan dos líneas:
+
+    from quarantine_api import router as quarantine_router
+    app.include_router(quarantine_router)
+
+| Entrada | De dónde sale |
+|---|---|
+| `original_code` | El código que entró al flujo |
+| `patched_code` | `/patch` |
+| `findings` | `/scan` |
+| `verify` | El objeto completo que devuelve `/verify` |
+| `model` | `/patch` (opcional) |
+
+Devuelve `{route, priority, criteria, evidence}`. En n8n va un nodo HTTP después de `POST /verify`; la rama de cuarentena y la de parche propuesto responden con ese objeto. No cambia `/scan`, `/patch` ni `/verify`. Si el estado falta o no se reconoce, el caso sale como cuarentena P1, igual que la salida `desconocido` del nodo `Estado`.
+
 ## Límites
 
 - La intención no se ve en el código. Se asoma en la procedencia: quién publicó la skill, de dónde viene y qué cambió entre versiones. Hoy la evidencia guarda el origen y los hashes; comparar versiones queda como trabajo futuro.
