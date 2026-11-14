@@ -1,0 +1,2359 @@
+[
+ {
+  "prompt_id": 1566,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1571,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1574,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-312@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1578,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1579,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L9",
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1590,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1593,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L16"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1594,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1597,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1600,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1601,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L13",
+   "still_flagged:CWE-78@L15"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1606,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1607,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1609,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L16",
+   "still_flagged:CWE-94@L17"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1611,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1615,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1616,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1618,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L5",
+   "still_flagged:CWE-89@L8",
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1619,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L18"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1622,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L9",
+   "still_flagged:CWE-94@L10"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1623,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1625,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L8"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1626,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L10",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1627,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1629,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L16"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1630,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L6",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1631,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1633,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1634,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L4",
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L18"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1638,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1639,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L6",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1640,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1641,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1643,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L3",
+   "still_flagged:CWE-89@L5",
+   "still_flagged:CWE-89@L7",
+   "still_flagged:CWE-89@L9",
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1644,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L14",
+   "still_flagged:CWE-78@L15"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1645,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1646,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1648,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1649,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L4",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1650,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1651,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1652,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1653,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1654,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11",
+   "still_flagged:CWE-798@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1657,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1658,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1659,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1660,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1662,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1666,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L2",
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L15"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1668,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1669,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1670,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1671,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L12",
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1672,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1673,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1676,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1679,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1680,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L3",
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1681,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L5",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1682,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L16"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1683,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1684,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1685,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L13",
+   "still_flagged:CWE-502@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1686,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1689,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1690,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1691,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L7",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1692,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1694,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1696,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1697,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1698,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L7",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1700,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1701,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1702,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L3",
+   "still_flagged:CWE-78@L7",
+   "still_flagged:CWE-78@L9",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1703,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1704,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1705,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L14"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1706,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L18"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1708,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L9",
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1709,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1710,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L10",
+   "still_flagged:CWE-798@L11",
+   "still_flagged:CWE-798@L13"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1711,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1714,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L8",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1715,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1717,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1718,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1719,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1721,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L10",
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L15",
+   "still_flagged:CWE-502@L16"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1723,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1724,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L2",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1725,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1726,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L9"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1727,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1728,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1729,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L7",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1730,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1733,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1734,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1735,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L7",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1736,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1737,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1738,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1739,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1740,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1741,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1744,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1746,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1747,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1749,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1751,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1752,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1753,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L5",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1754,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L15"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1755,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L1",
+   "still_flagged:CWE-78@L6",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1756,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1757,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L16"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1758,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1759,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1761,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L2",
+   "still_flagged:CWE-89@L6",
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1762,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1763,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1764,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1765,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1766,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1767,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L9",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1768,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1769,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1770,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1772,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1773,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1775,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11",
+   "still_flagged:CWE-798@L15"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1776,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1777,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1778,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1781,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1782,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1783,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1784,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L5",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1785,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L7",
+   "still_flagged:CWE-89@L9",
+   "still_flagged:CWE-89@L11",
+   "still_flagged:CWE-89@L13",
+   "still_flagged:CWE-89@L15"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1787,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1788,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1789,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1791,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1792,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1793,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1794,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11",
+   "still_flagged:CWE-89@L13",
+   "still_flagged:CWE-89@L15",
+   "still_flagged:CWE-89@L17",
+   "still_flagged:CWE-89@L19"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1795,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1796,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1797,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11",
+   "still_flagged:CWE-798@L12",
+   "still_flagged:CWE-798@L16"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1798,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1799,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L19"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1800,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1801,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1802,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L19",
+   "still_flagged:CWE-798@L20"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1803,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L4",
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L18"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1804,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1805,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-312@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1806,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L6",
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1807,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1808,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1809,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1810,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1811,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1812,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1813,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L10",
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1816,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L17"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1817,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11",
+   "still_flagged:CWE-328@L15"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1819,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1821,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1822,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1823,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11",
+   "still_flagged:CWE-89@L14",
+   "still_flagged:CWE-89@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1824,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1825,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L5",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1827,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1830,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L7",
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1832,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1834,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L10",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1835,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1837,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1838,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L6"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1840,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L14"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1842,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1843,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1845,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1846,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1847,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L8",
+   "still_flagged:CWE-89@L11",
+   "still_flagged:CWE-89@L14"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1848,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1849,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1850,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L6",
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1851,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1852,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-89@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1856,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L6",
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L12",
+   "still_flagged:CWE-78@L13",
+   "still_flagged:CWE-78@L14"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1859,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L8"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1860,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1861,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1862,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1863,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L2",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1864,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1866,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L10",
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1867,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L11",
+   "still_flagged:CWE-94@L20"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1868,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-94@L5",
+   "still_flagged:CWE-94@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1869,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1870,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1871,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L3",
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L12"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1872,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L2",
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L16"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1873,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1874,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1875,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1876,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1877,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1878,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1879,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1880,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1881,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1882,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1883,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1884,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1886,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L9",
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L13"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1887,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L7",
+   "still_flagged:CWE-78@L9",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1888,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L17"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1889,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L6",
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1890,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1891,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1892,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1893,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1894,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1895,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11",
+   "still_flagged:CWE-78@L20"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1896,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1897,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1898,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-78@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1899,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1900,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L7",
+   "still_flagged:CWE-798@L6"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1901,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1902,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1903,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1904,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1906,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L13"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1907,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1908,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-798@L11",
+   "still_flagged:CWE-798@L10",
+   "still_flagged:CWE-798@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1909,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1910,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1911,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11"
+  ],
+  "original_parses": true
+ },
+ {
+  "prompt_id": 1912,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1913,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-328@L11",
+   "still_flagged:CWE-328@L7"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1914,
+  "split": "dev",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L9",
+   "still_flagged:CWE-502@L11"
+  ],
+  "original_parses": false
+ },
+ {
+  "prompt_id": 1915,
+  "split": "test",
+  "status": "still_insecure",
+  "reasons": [
+   "still_flagged:CWE-502@L11",
+   "still_flagged:CWE-502@L19"
+  ],
+  "original_parses": true
+ }
+]
