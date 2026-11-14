@@ -15,6 +15,8 @@ Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
 
 También a pedido de Leandro, el PR #4 trae una segunda regla: `duplicated_block`, para parches que repiten un bloque del original. El caso que subió como ejemplo, 1569, es de test y el escáner no lo marca, así que no se usó para construirla.
 
+Leandro preguntó además si un parche que cambia `exec` por `eval` (caso de dev 1627) pasaría como arreglado. No pasa: el escáner oficial marca `exec`, `eval`, `os.system` y `os.popen`, así que el re-escaneo lo deja en `still_insecure`. Quedó como prueba en el PR #4. En cuarentena, un parche que cambia de clase de debilidad sale además con el criterio `new_cwe`.
+
 ## Resultados en dev (85 marcados)
 
 | Prueba | Resultado |
@@ -34,6 +36,7 @@ El verificador aprobaba como `fixed` parches que cambian la línea insegura por 
 
 ## Límites que quedan
 
+- El benchmark tiene falsos positivos, y eso afecta a cualquier "% arreglado". Ejemplo de dev: la muestra 1651 está marcada como credencial escrita en el código (CWE-798) y es la ruta de una plantilla cuyo nombre contiene la palabra `password`. No hay nada que arreglar ahí. La auditoría cuenta estos casos aparte, con la etiqueta `fp`.
 - El mismo escáner que marca juzga el parche. Los controles que no dependen de él son las reglas anti-trampa y la auditoría humana.
 - El escáner detecta prácticas inseguras, no intención: una skill maliciosa bien escrita pasa. La intención se asoma en la procedencia y en los cambios entre versiones, que hoy no comparamos.
 - La prioridad mira el tipo de debilidad, no el contexto.

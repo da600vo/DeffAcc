@@ -15,7 +15,7 @@ El verificador también se equivoca. Esta auditoría mide cuánto, con parches r
 
        python audit.py sample --verify results/verify_gemini.json --patches cache/patches/gemini --data PurpleLlama/CybersecurityBenchmarks/datasets/instruct/instruct.json --split dev --n 10
 
-2. Leer `audit/gemini_dev_hoja.md` y llenar la columna `arregla` de `audit/gemini_dev_etiquetas.csv` con `si`, `no` o `duda`.
+2. Leer `audit/gemini_dev_hoja.md` y llenar la columna `arregla` de `audit/gemini_dev_etiquetas.csv` con `si`, `no`, `duda` o `fp`. `fp` es un falso positivo del escáner: lo marcado no era un problema. Esos casos se cuentan aparte y no entran en las tasas.
 3. Calcular:
 
        python audit.py score --labels audit/gemini_dev_etiquetas.csv --verify results/verify_gemini.json --reviewer "Nombre"
