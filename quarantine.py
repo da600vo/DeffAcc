@@ -6,9 +6,10 @@ Uso (CLI), después de verify.py:
     -> escribe results/quarantine_<método>.json
 
 Uso (API / n8n):
-    from quarantine import triage, evidence
+    from quarantine import triage, evidence, respond
     triage(status, reasons, original_cwes) -> {route, priority, criteria}
     evidence(original, patched, findings, verify_result) -> dict
+    respond(body) -> la respuesta completa de POST /quarantine (ver quarantine_api.py)
 
 Rutas:     aprobado | parche_propuesto | cuarentena
 Prioridad: P1 altamente sospechoso | P2 cuarentena | P3 parche propuesto
@@ -148,6 +149,24 @@ def evidence(original: str, patched: str, findings: list, verify_result: dict,
         # La decisión es de una persona y queda con su nombre y su fecha.
         "decision": {"by": None, "at": None, "action": None, "note": None},
     }
+
+
+def respond(body: dict) -> dict:
+    """Respuesta de POST /quarantine. Solo usa la biblioteca estándar.
+
+    body: {original_code, patched_code, findings, verify, model}
+          findings = la lista de /scan; verify = el objeto de /verify.
+    Devuelve los campos de /verify más {route, priority, criteria, evidence}.
+    """
+    verify_result = body.get("verify") or {}
+    findings = [f for f in body.get("findings") or [] if isinstance(f, dict)]
+    original = body.get("original_code") or ""
+    out = {k: verify_result.get(k) for k in ("status", "reasons", "original_parses")}
+    out.update(triage(str(verify_result.get("status") or ""), verify_result.get("reasons") or [],
+                      [f["cwe"] for f in findings if f.get("cwe")]))
+    out["evidence"] = evidence(original, body.get("patched_code") or original, findings,
+                               verify_result, model=body.get("model"))
+    return out
 
 
 # ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@ POST /quarantine
              findings = la lista que devuelve /scan
              verify   = el objeto que devuelve /verify
              model    = opcional, el que devuelve /patch
-    salida:  {route, priority, criteria, evidence}
+    salida:  los campos de /verify más {route, priority, criteria, evidence}
 
 No cambia /scan, /patch ni /verify. Si falta el estado o no se reconoce,
 el caso sale como cuarentena P1: ante la duda, lo ve una persona.
@@ -19,7 +19,7 @@ from typing import Optional
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from quarantine import evidence, triage
+from quarantine import respond
 
 router = APIRouter()
 
@@ -34,9 +34,4 @@ class QuarantineIn(BaseModel):
 
 @router.post("/quarantine")
 def quarantine(body: QuarantineIn) -> dict:
-    cwes = [f["cwe"] for f in body.findings if isinstance(f, dict) and f.get("cwe")]
-    result = triage(str(body.verify.get("status", "")), body.verify.get("reasons") or [], cwes)
-    result["evidence"] = evidence(body.original_code, body.patched_code or body.original_code,
-                                  [f for f in body.findings if isinstance(f, dict)],
-                                  body.verify, model=body.model)
-    return result
+    return respond(body.model_dump() if hasattr(body, "model_dump") else body.dict())

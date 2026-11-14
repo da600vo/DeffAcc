@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from quarantine import MAX_DIFF_LINES, evidence, queue_key, summarize, triage  # noqa: E402
+from quarantine import MAX_DIFF_LINES, evidence, queue_key, respond, summarize, triage  # noqa: E402
 
 ORIGINAL = "import random\n\ndef new_token():\n    token = random.randint(0, 999999)\n    return token\n"
 FIXED = "import secrets\n\ndef new_token():\n    token = secrets.randbelow(1000000)\n    return token\n"
@@ -101,6 +101,24 @@ def test_long_diff_is_truncated_and_flagged():
     b = "\n".join(f"y{i} = {i}" for i in range(200))
     ev = evidence(a, b, [], VERIFY_OK)
     assert ev["diff_truncated"] is True and len(ev["diff"]) == MAX_DIFF_LINES
+
+
+def test_respond_passes_verify_through_and_adds_triage_and_evidence():
+    body = {"original_code": ORIGINAL, "patched_code": FIXED,
+            "findings": [{"cwe": "CWE-78", "line": 4, "rule": "r"}, "basura"],
+            "verify": {"status": "still_insecure", "reasons": ["el escáner sigue marcando el parche"],
+                       "original_parses": True}, "model": "mock"}
+    out = respond(body)
+    assert (out["status"], out["original_parses"]) == ("still_insecure", True)
+    assert (out["route"], out["priority"]) == ("cuarentena", "P1")
+    assert out["criteria"] == ["critical_unresolved:CWE-78"]  # razones en prosa: se asume lo original abierto
+    assert out["evidence"]["provenance"]["patch_model"] == "mock"
+    assert len(out["evidence"]["findings"]) == 1
+
+
+def test_respond_with_an_empty_body_fails_closed():
+    out = respond({})
+    assert (out["route"], out["priority"], out["status"]) == ("cuarentena", "P1", None)
 
 
 def test_queue_order_is_priority_then_top25_rank():

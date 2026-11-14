@@ -69,7 +69,7 @@ Escribe `results/quarantine_gemini.json` con el resumen (`quarantine_rate`, `P1_
 | `verify` | El objeto completo que devuelve `/verify` |
 | `model` | `/patch` (opcional) |
 
-Devuelve `{route, priority, criteria, evidence}`. En n8n va un nodo HTTP después de `POST /verify`; la rama de cuarentena y la de parche propuesto responden con ese objeto. No cambia `/scan`, `/patch` ni `/verify`. Si el estado falta o no se reconoce, el caso sale como cuarentena P1, igual que la salida `desconocido` del nodo `Estado`.
+Devuelve los campos de `/verify` más `{route, priority, criteria, evidence}`. En n8n va un nodo HTTP en la rama de cuarentena, entre `Estado` y `CUARENTENA`. La función `quarantine.respond(body)` hace lo mismo sin FastAPI, así que la API simulada también puede exponerlo. No cambia `/scan`, `/patch` ni `/verify`. Si el estado falta o no se reconoce, el caso sale como cuarentena P1, igual que la salida `desconocido` del nodo `Estado`.
 
 ## Límites
 

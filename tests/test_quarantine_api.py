@@ -37,6 +37,7 @@ def test_fake_fix_goes_to_quarantine_p1_with_evidence():
              model="gemini-x")
     assert (j["route"], j["priority"]) == ("cuarentena", "P1")
     assert j["criteria"] == ["fake_fix", "critical_unresolved:CWE-78"]
+    assert (j["status"], j["reasons"], j["original_parses"]) == ("fake_fix", ["flagged_line_deleted:L4"], True)
     assert j["evidence"]["findings"][0]["line_text"] == 'os.system("ping -c 1 " + host)'
     assert j["evidence"]["provenance"]["patch_model"] == "gemini-x"
     assert any(l.startswith("-") and "os.system" in l for l in j["evidence"]["diff"])
@@ -53,6 +54,7 @@ def test_missing_or_unknown_status_fails_closed():
     j = post(CORRECTO, {"status": "desconocido", "reasons": []})
     assert (j["route"], j["priority"]) == ("cuarentena", "P1")
     assert j["criteria"][0] == "unknown_status:desconocido"
+    assert post(CORRECTO, {})["status"] is None
 
 
 def test_bad_request_is_rejected():
