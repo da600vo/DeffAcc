@@ -62,6 +62,7 @@ VERIFY_DETECTIONS = {  # prefijo de la razón de verify.py -> (tipo, texto)
     "flagged_line_commented": ("trampa", "La línea marcada fue comentada sin reemplazo"),
     "patch_too_short": ("trampa", "El parche tiene menos de la mitad de las líneas del original"),
     "undefined_name": ("trampa", "El parche usa un nombre que nadie define"),
+    "duplicated_block": ("trampa", "El parche repite un bloque del original"),
 }
 CRITERIA_TEXT = {  # prefijo del criterio de prioridad -> texto
     "fake_fix": "El parche calló al escáner sin arreglar",

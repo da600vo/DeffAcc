@@ -137,6 +137,14 @@ def test_detections_keep_codes_they_do_not_know():
     assert (d[1]["type"], d[1]["text"]) == ("otra", "el escáner sigue marcando el parche")
 
 
+def test_detections_name_the_rules_from_pr_4():
+    d = detections([], {"reasons": ["undefined_name:safe_ping", "duplicated_block:L10-L15"]}, [])
+    assert [(x["type"], x["text"]) for x in d] == [
+        ("trampa", "El parche usa un nombre que nadie define"),
+        ("trampa", "El parche repite un bloque del original"),
+    ]
+
+
 def test_respond_includes_detections():
     out = respond({"original_code": ORIGINAL, "patched_code": ORIGINAL,
                    "findings": [{"cwe": "CWE-89", "line": 1}],

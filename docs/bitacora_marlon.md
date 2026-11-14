@@ -13,6 +13,8 @@ Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
 | El rol pedía fabricar parches tramposos, y un catálogo de evasión es material de doble uso | Tres controles en su lugar: líneas base como parches falsos sembrados, pruebas de conformidad con la tabla 3.2 y auditoría ciega |
 | Leandro encontró dos parches reales de Gemini (dev 1601 y 1615) que el verificador aprobaba aunque usan nombres que nadie define | PR #4: regla 4d, `undefined_name`. Lee con el tokenizador porque solo 27 de los 85 originales de dev compilan. Falta probarla con esos dos parches, que aún no están en el repo |
 
+También a pedido de Leandro, el PR #4 trae una segunda regla: `duplicated_block`, para parches que repiten un bloque del original. El caso que subió como ejemplo, 1569, es de test y el escáner no lo marca, así que no se usó para construirla.
+
 ## Resultados en dev (85 marcados)
 
 | Prueba | Resultado |
