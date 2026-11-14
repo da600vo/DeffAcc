@@ -10,9 +10,7 @@ REGLAS DE ESTA FICHA (los comentarios HTML no salen en el PDF)
 
 # CyberElotes · Parche Verificado
 
-**Defensive Acceleration Hackathon 2026 · Track 3: Ciberdefensa automatizada** · Repo: ⟦PENDIENTE: URL pública del repo⟧
-Equipo: Adrián, David, Antonia, Leandro, Marlon
-
+**Defensive Acceleration Hackathon 2026 · Track 3: Ciberdefensa automatizada** · Repo: https://github.com/da600vo/DeffAcc
 ## 1. Amenaza
 
 Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con los permisos del agente. Si ese código trae prácticas inseguras (inyección de comandos, CWE-78; aleatoriedad débil, CWE-338; `eval`, `pickle`), el agente las hereda. Revisarlo a mano no escala, y pedirle a un LLM que lo "arregle" tiene una trampa: un parche puede **silenciar al escáner sin arreglar nada**, por ejemplo borrando la línea marcada. En nuestros datos de desarrollo, borrar la línea marcada silencia al escáner en ⟦PENDIENTE: n de 85, de results/verify_delete_line.json (dev)⟧ casos. Si se mide solo con el escáner, una estrategia que no arregla nada parece exitosa.
@@ -29,6 +27,7 @@ Un flujo automatizado (n8n + API FastAPI) que, antes de que el agente use una sk
    - el escáner lo sigue marcando → `still_insecure`;
    - reglas anti-trampa → `fake_fix`: desaparece una función o clase; la línea marcada se borra o comenta sin reemplazo equivalente; el parche tiene menos de la mitad de las líneas;
    - si pasa todo → `fixed`.
+
 5. **Enruta:** aprobado (sin hallazgos), parche propuesto (`fixed`) o cuarentena para un especialista (el resto).
 **El parche nunca se aplica solo:** se entrega como propuesta con evidencia (CWE, línea, diff y razones del verificador). Las reglas anti-trampa se endurecieron con un red team interno que atacó el verificador solo en dev.
 
@@ -50,7 +49,7 @@ def ping(host):
 ## 3. Cómo lo evaluamos
 
 - **Datos:** CyberSecEval `instruct.json` (PurpleLlama, Meta), subconjunto Python: 351 fragmentos con una línea insegura conocida y su CWE.
-- **División por repositorio** (semilla 42), para que el estilo de un proyecto no aparezca en ambos lados: dev 115 fragmentos (85 marcados) para construir prompt y reglas; test 236 (163 marcados), **corrido una sola vez** con el prompt congelado. Fuente: `results/scan_baseline.json`. Excepción declarada: en una exploración inicial del prompt se inspeccionó a mano 1 fragmento que resultó ser de test (1566), y esas observaciones motivaron reglas de la versión 2 del prompt.
+- **División por repositorio** (semilla 42), para que el estilo de un proyecto no aparezca en ambos lados: dev 115 fragmentos (85 marcados) para construir prompt y reglas; test 236 (163 marcados), **corrido una sola vez** con el prompt congelado. Fuente: `results/scan_baseline.json`.Excepción declarada: en una exploración inicial del prompt se inspeccionó a mano 1 fragmento de test (1566); su parche fue correcto y no motivó ninguna regla.
 - **Comparación contra líneas base:** `noop` (no hacer nada) y `delete_line` (borrar la línea marcada), frente a `gemini` (nuestro parcheador), **sobre los mismos fragmentos**.
 - **Métricas** sobre los marcados: corrección real (`fixed`), falsa corrección (`fake_fix`), sigue inseguro, sintaxis rota.
 - **Reproducibilidad:** codeshield 1.0.1 y semgrep 1.79.0 fijados y registrados; el resultado del escáner depende de la versión de semgrep. Un comando por paso en el README. El código de las muestras nunca se ejecuta.
@@ -78,8 +77,9 @@ def ping(host):
 - Solo Python. Solo el **código** de la skill: el texto de `SKILL.md`, las descripciones MCP, las salidas de herramientas y los archivos del proyecto quedan fuera (trabajo futuro).
 - El resultado del escáner cambia con la versión de semgrep; por eso se fija y se registra.
 - **Excepción en la separación dev/test:** el resultado sobre 1 fragmento de test (1566) no es completamente independiente, porque se vio durante la exploración inicial del prompt.
-- **Calidad del parche:** en una inspección informal de parches de dev vimos que Gemini a veces cambia una llamada peligrosa por otra equivalente (por ejemplo, `exec` por `eval`) o corrige solo una de varias ocurrencias, y el verificador no siempre lo detecta. No hicimos una auditoría manual sistemática, así que no estimamos qué fracción de los `fixed` es un arreglo legítimo.
+- **Calidad del parche:** en una inspección informal de parches de dev vimos que Gemini a veces cambia una llamada peligrosa por otra equivalente o corrige solo una de varias ocurrencias, y el verificador no siempre lo detecta. No hicimos una auditoría manual sistemática, así que no estimamos qué fracción de los `fixed` es un arreglo legítimo.
 - **Falsos positivos del benchmark:** parte de los fragmentos marcados reciben valores constantes o ya son seguros, así que "arreglarlos" no reduce un riesgo real y el porcentaje de corrección debe leerse con cuidado.
+- El endpoint `/inspect` no se evalúa con las métricas de esta ficha: estas cubren solo escaneo, parcheo y verificación.
 
 **Riesgo de uso dual**
 
