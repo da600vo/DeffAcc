@@ -1,0 +1,87 @@
+# Bitácora de Marlon: apuntes para la ficha y el pitch
+
+Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
+
+## Dificultades y cómo se resolvieron
+
+| Dificultad | Qué hicimos |
+|---|---|
+| `verify.py` no corría sobre `main`: `scan_baseline.py` dejó de exportar `RULES` y `oss` al cambiar al escáner oficial | PR #2: `verify.py` llama al mismo escáner oficial |
+| El verificador re-escaneaba con un escáner distinto al de la línea base: uno marcaba y otro juzgaba | El mismo arreglo. Queda un aviso si los originales no coinciden con `results/scan_baseline.json` |
+| `scan_dir` del escáner oficial no devuelve la línea, y la regla anti-trampa la necesita | El verificador toma la línea del propio ICD. Coincidió con la línea del dataset en 15 de 15 casos revisados |
+| La severidad del escáner no sirve para priorizar: los 125 hallazgos de dev son `warning` | La prioridad usa el CWE Top 25 de MITRE 2025 |
+| El rol pedía fabricar parches tramposos, y un catálogo de evasión es material de doble uso | Tres controles en su lugar: líneas base como parches falsos sembrados, pruebas de conformidad con la tabla 3.2 y auditoría ciega |
+| Leandro encontró dos parches reales de Gemini (dev 1601 y 1615) que el verificador aprobaba aunque usan nombres que nadie define | PR #4: regla 4d, `undefined_name`. Lee con el tokenizador porque solo 27 de los 85 originales de dev compilan. Falta probarla con esos dos parches, que aún no están en el repo |
+
+También a pedido de Leandro, el PR #4 trae una segunda regla: `duplicated_block`, para parches que repiten un bloque del original. El caso que subió como ejemplo, 1569, es de test y el escáner no lo marca, así que no se usó para construirla.
+
+Leandro preguntó además si un parche que cambia `exec` por `eval` (caso de dev 1627) pasaría como arreglado. No pasa: el escáner oficial marca `exec`, `eval`, `os.system` y `os.popen`, así que el re-escaneo lo deja en `still_insecure`. Quedó como prueba en el PR #4. En cuarentena, un parche que cambia de clase de debilidad sale además con el criterio `new_cwe`.
+
+## Resultados en dev (85 marcados)
+
+| Prueba | Resultado |
+|---|---|
+| `noop` | 85 de 85 `still_insecure` |
+| `delete_line` | 54 `fake_fix`, 25 `still_insecure`, 6 `broken_syntax`, 0 `fixed` |
+| Borrar la línea marcada calla al escáner | En 57 de 85 casos. El verificador no deja pasar ninguno: 54 `fake_fix` y 3 `broken_syntax` |
+| Tabla 3.2 de la arquitectura | Pasan las 8 pruebas |
+| Cuarentena con `noop` | 53 P1 y 32 P2 |
+| Cuarentena con `delete_line` | 77 P1 y 8 P2 |
+| Secretos en la evidencia | Tapados en los 13 casos que los tienen en la línea marcada |
+
+Pendiente: cuarentena y auditoría con los parches de Gemini.
+
+## Resultado en agregado para la ficha
+
+Tipos de parche tramposo o fallido probados contra el verificador. Solo en dev o con ejemplos inventados, nunca en test.
+
+| Tipo de parche | Verificador de hoy | Con las reglas del PR #4 |
+|---|---|---|
+| No hacer nada | Atrapado | Atrapado |
+| Borrar la línea marcada | Atrapado | Atrapado |
+| Comentar la línea marcada | Atrapado | Atrapado |
+| Cambio cosmético que deja la debilidad | Atrapado | Atrapado |
+| Cambiar una función peligrosa por otra de la misma clase | Atrapado | Atrapado |
+| Parche que no compila | Atrapado | Atrapado |
+| Usar un nombre que nadie define | Pasa como `fixed` | Atrapado |
+| Repetir un bloque del original | Pasa como `fixed` | Atrapado |
+| **Total** | **6 de 8** | **8 de 8** |
+
+## Integración de la API (2:35 p. m.)
+
+Probé el `api.py` de la rama David junto con el verificador del PR #4, el `patch.py` de la rama Leandro y el endpoint de cuarentena. La prueba quedó en `tests/test_api_contrato.py` y corre en 3 segundos.
+
+| Qué | Resultado |
+|---|---|
+| `/health` y `/scan` | Bien. `/scan` da CWE-78 en la línea 4 para el ejemplo de la tabla 3.2 |
+| `/verify` con el verificador | Bien. Coincide con los cuatro casos de la tabla 3.2 |
+| `/verify` sin `verify.py`, como está `main` hoy | Responde `fixed` para cualquier parche. Es una respuesta fija que deja pasar todo; conviene que diga un estado desconocido, que el flujo ya manda a cuarentena |
+| `/patch` | Error 500. `api.py` hace `from patch import patch` y `patch.py` solo tiene `build_prompt(sample)`. Falta la función `patch(code, findings)` |
+| `/inspect` sin SkillSpector instalado | Bien. Responde `unavailable` y no rompe el flujo |
+| `/quarantine` | Funciona al incluir el router: son dos líneas en `api.py` |
+
+## Caso donde el sistema falla (la plantilla de la ficha lo pide)
+
+El verificador aprobaba como `fixed` parches que cambian la línea insegura por código que usa nombres sin definir: una función inventada o un módulo sin importar. El escáner calla, la línea sigue ahí y las funciones siguen definidas, así que ninguna regla saltaba. Lo encontró Leandro revisando parches reales de dev. Quedó convertido en una regla nueva con 16 pruebas (PR #4).
+
+## Límites que quedan
+
+- El benchmark tiene falsos positivos, y eso afecta a cualquier "% arreglado". Ejemplo de dev: la muestra 1651 está marcada como credencial escrita en el código (CWE-798) y es la ruta de una plantilla cuyo nombre contiene la palabra `password`. No hay nada que arreglar ahí. La auditoría cuenta estos casos aparte, con la etiqueta `fp`.
+- El mismo escáner que marca juzga el parche. Los controles que no dependen de él son las reglas anti-trampa y la auditoría humana.
+- El escáner detecta prácticas inseguras, no intención: una skill maliciosa bien escrita pasa. La intención se asoma en la procedencia y en los cambios entre versiones, que hoy no comparamos.
+- La prioridad mira el tipo de debilidad, no el contexto.
+- Los resultados cambian con la versión del escáner: una skill ya revisada debe re-revisarse cuando cambia el escáner.
+- La auditoría la hace una sola persona con una muestra pequeña: 1 error en 10 da un intervalo de 2 % a 40 %.
+- El código sale del equipo al pedir el parche. Los términos de la capa gratuita de Gemini, vigentes desde el 23 de marzo de 2026, piden no enviar información sensible ni confidencial.
+
+## Borrador para la sección 5 de la ficha (88 palabras)
+
+El mismo escáner que marca juzga el parche, y detecta prácticas inseguras, no intención: una skill maliciosa bien escrita pasa. Solo Python, sin ejecutar el código, y muchos fragmentos no compilan. La auditoría humana es de una sola persona y muestra pequeña. Doble uso: conocer las reglas ayuda a esquivarlas; por eso no publicamos técnicas de evasión, el parche nunca se aplica solo y todo caso dudoso lo decide una persona con evidencia trazable. El código sale hacia el LLM: para uso real, modelo local o capa paga.
+
+## Referencias candidatas
+
+- Bhatt et al. (2023). Purple Llama CyberSecEval: A Secure Coding Benchmark for Language Models. Meta.
+- MITRE (2025). CWE Top 25 Most Dangerous Software Weaknesses. cwe.mitre.org/top25
+- NIST (2022). SP 800-218, Secure Software Development Framework 1.1, prácticas PW.4.1 y PW.7.2.
+- Google (2026). Gemini API Additional Terms of Service. aistudio.google.com/docs/terms
+- Lanier, J. Charla «Data Dignity and the Inversion of AI». Falta confirmar año y sede.
