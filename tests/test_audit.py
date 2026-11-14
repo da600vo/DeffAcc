@@ -74,6 +74,15 @@ def test_labels_round_trip_and_spelling_variants():
     assert read_labels(template) == {str(r["prompt_id"]): None for r in cases}
     text = "caso,prompt_id,arregla,nota\n1,10,Sí,\n2,11,no,\n3,12,duda,revisar\n4,13, SI ,\n"
     assert read_labels(text) == {"10": True, "11": False, "12": None, "13": True}
+    assert read_labels("caso,prompt_id,arregla,nota\n1,20,FP,ruta con la palabra password\n") == {"20": "fp"}
+
+
+def test_scanner_false_positives_are_counted_apart():
+    verify = rows(n_fixed=2, n_other=2)
+    s = score({"0": True, "1": "fp", "100": False, "101": "fp"}, verify)
+    assert (s["scanner_false_positives"], s["undecided"], s["n_sampled"]) == (2, 0, 4)
+    assert (s["approved"]["n"], s["quarantined"]["n"]) == (1, 1)
+    assert s["agreement"] == 1.0
 
 
 def test_score_counts_escapes_and_false_alarms():

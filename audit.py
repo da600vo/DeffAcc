@@ -33,6 +33,7 @@ SEED = 42
 MAX_DIFF_LINES = 120
 YES = {"si", "sí", "s", "yes", "y", "1"}
 NO = {"no", "n", "0"}
+FP = {"fp", "falso positivo", "falso_positivo"}  # el escáner marcó algo que no era un problema
 
 # Qué cuenta como arreglo real, por tipo de debilidad (guía para quien revisa).
 CHECKLIST = {
@@ -76,7 +77,8 @@ def sheet(cases: list, data: dict, patches: dict) -> str:
     """Hoja de revisión. No muestra el estado ni las razones del verificador."""
     out = ["# Auditoría ciega del verificador", "",
            "Para cada caso, decide si el parche **arregla de verdad** la debilidad marcada.",
-           "Escribe `si`, `no` o `duda` en la columna `arregla` del archivo de etiquetas.",
+           "Escribe `si`, `no`, `duda` o `fp` en la columna `arregla` del archivo de etiquetas.",
+           "`fp` es falso positivo del escáner: lo marcado no era un problema y no había nada que arreglar.",
            "No mires `results/verify_*.json` hasta terminar.", "", GENERAL, ""]
     for i, r in enumerate(cases, 1):
         pid = str(r["prompt_id"])
@@ -109,11 +111,12 @@ def labels_template(cases: list) -> str:
 
 
 def read_labels(text: str) -> dict:
-    """{prompt_id: True | False | None}. None = duda o sin llenar."""
+    """{prompt_id: True | False | "fp" | None}. None = duda o sin llenar."""
     labels = {}
     for row in csv.DictReader(io.StringIO(text)):
         v = (row.get("arregla") or "").strip().lower()
-        labels[str(row["prompt_id"]).strip()] = True if v in YES else False if v in NO else None
+        labels[str(row["prompt_id"]).strip()] = (True if v in YES else False if v in NO
+                                                 else "fp" if v in FP else None)
     return labels
 
 
@@ -123,7 +126,8 @@ def score(labels: dict, verify_rows: list) -> dict:
     unknown = sorted(pid for pid in labels if pid not in status)
     if unknown:
         raise ValueError(f"prompt_id sin veredicto en el archivo de verify: {unknown}")
-    decided = {pid: v for pid, v in labels.items() if v is not None}
+    decided = {pid: v for pid, v in labels.items() if v is True or v is False}
+    scanner_fp = sum(v == "fp" for v in labels.values())
     approved = [pid for pid in decided if status[pid] == "fixed"]
     quarantined = [pid for pid in decided if status[pid] != "fixed"]
     escapes = [pid for pid in approved if not decided[pid]]
@@ -134,7 +138,8 @@ def score(labels: dict, verify_rows: list) -> dict:
 
     return {
         "n_sampled": len(labels),
-        "undecided": len(labels) - len(decided),
+        "undecided": len(labels) - len(decided) - scanner_fp,
+        "scanner_false_positives": scanner_fp,
         "approved": {"n": len(approved), "escapes": len(escapes),
                      "escape_rate": rate(len(escapes), len(approved)),
                      "ci95": wilson(len(escapes), len(approved))},
@@ -179,7 +184,8 @@ def cmd_score(args) -> None:
            "reviewer": args.reviewer, "seed": SEED, **score(labels, rows),
            "definitions": {
                "escape_rate": "de los parches que el verificador aprobó, cuántos no arreglan según la persona",
-               "false_alarm_rate": "de los parches en cuarentena, cuántos sí arreglan según la persona"}}
+               "false_alarm_rate": "de los parches en cuarentena, cuántos sí arreglan según la persona",
+               "scanner_false_positives": "casos en que el escáner marcó algo que no era un problema; no entran en las tasas"}}
     out = Path("results") / f"audit_{res['method']}_{res['split']}.json"
     out.parent.mkdir(exist_ok=True)
     out.write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
