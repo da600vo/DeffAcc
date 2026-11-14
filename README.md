@@ -32,7 +32,7 @@ python verify.py --patches cache/patches/delete_line --data PurpleLlama/Cybersec
 python metrics.py
 ```
 
-Nota: con semgrep 1.185, `CodeShield.scan_code` casi no marca código Python porque sus archivos de reglas generados cargan 0 reglas. Por eso `scan_baseline.py` usa directamente las reglas Python de CodeShield.
+Nota: versiones fijadas en `requirements.txt` (codeshield 1.0.1, semgrep 1.79.0). Los resultados cambian con la versión de semgrep: con 1.185 los archivos de reglas generados de CodeShield no cargan y casi nada sale marcado. `scan_baseline.py` avisa si tus versiones no coinciden.
 
 ## Estructura
 

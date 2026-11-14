@@ -1,7 +1,7 @@
 flowchart LR
   DS["CyberSecEval<br/>instruct.json · Python 351"]:::ext --> SP["División por repositorio<br/>semilla 42"]:::base
-  SP --> DEV["<b>dev</b> · 115<br/>75 marcados<br/>para construir"]:::base
-  SP --> TEST["<b>test</b> · 236<br/>153 marcados<br/>se corre UNA vez"]:::base
+  SP --> DEV["<b>dev</b> · 115<br/>85 marcados<br/>para construir"]:::base
+  SP --> TEST["<b>test</b> · 236<br/>163 marcados<br/>se corre UNA vez"]:::base
   DEV & TEST --> M1["noop<br/>no hacer nada"]:::base
   DEV & TEST --> M2["delete_line<br/>borrar la línea"]:::base
   DEV & TEST --> M3["gemini<br/>nuestro parcheador"]:::leandro
