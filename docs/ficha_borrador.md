@@ -1,5 +1,7 @@
 # Borrador de la ficha técnica
 
+> **Documento histórico de trabajo.** Sus cifras no son oficiales y pueden estar obsoletas. Las oficiales están en `docs/FICHA.md` y `results/metrics.json`.
+
 Borrador de Marlon para Adrián. Sigue la plantilla oficial del evento y sus límites de palabras.
 Los `[__]` se llenan con `results/*.json` de la parte de prueba. Donde dice "en desarrollo", el número
 es de dev y es provisional: en la ficha final va el de prueba.

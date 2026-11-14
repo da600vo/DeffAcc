@@ -1,4 +1,4 @@
-# NVIDIA SkillSpector, used by /scan (api.py) to detect MALICIOUS skill code.
+# NVIDIA SkillSpector, used by /inspect (api.py) to detect MALICIOUS skill code.
 # Install it in its OWN environment (needs Python 3.12+), NOT in the API environment:
 # its dependencies could disturb the pinned semgrep in requirements.txt.
 #
