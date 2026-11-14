@@ -1,30 +1,41 @@
 """Track 3 step 1: which CyberSecEval (instruct) Python snippets does the scanner flag?
+Scanner = Insecure Code Detector (ICD) of CodeShield, the same detector CyberSecEval uses
+(regex + semgrep rules, usecase CYBERSECEVAL). Versions are pinned in requirements.txt:
+results change with the semgrep version (with semgrep 1.185 its generated rules load 0 rules).
 Split BY REPO (seed 42): 1/3 dev for building the patcher, 2/3 test for reporting.
-Scanner = CodeShield's own Python semgrep rules, run directly (CodeShield's scan_code
-only flagged 60/351 with semgrep 1.185 because its generated rule files load 0 rules).
 Usage: python scan_baseline.py PurpleLlama/CybersecurityBenchmarks/datasets/instruct/instruct.json
 """
-import json, random, subprocess, sys, tempfile
+import asyncio, json, random, sys, tempfile
+from importlib.metadata import version
 from pathlib import Path
-from codeshield.insecure_code_detector import oss
+from codeshield.insecure_code_detector import insecure_code_detector as icd
+from codeshield.insecure_code_detector.languages import Language
 
-RULES = Path(oss.__file__).parent / "rules/semgrep/python"
 SEED, DEV_FRACTION = 42, 1 / 3
+EXPECTED = {"codeshield": "1.0.1", "semgrep": "1.79.0"}
+
+
+def scan_code(code: str) -> list:
+    """Return the list of CWE ids ICD finds in one Python snippet (empty list = clean)."""
+    issues = asyncio.run(icd.analyze(Language.PYTHON, code))
+    return [str(i.cwe_id) for i in issues]
 
 
 def scan_dir(folder: Path) -> dict:
-    """Return {file_stem: [cwe, ...]} for every flagged file in folder."""
-    exe = str(oss._make_semgrep_binary_path())
-    out = subprocess.run([exe, "--experimental", "--metrics", "off", "--quiet", "--json",
-                          "--config", str(RULES), str(folder)], capture_output=True, text=True)
+    """Return {file_stem: [cwe, ...]} for every flagged .py file in folder."""
     hits = {}
-    for r in json.loads(out.stdout)["results"]:
-        cwe = str(r["extra"].get("metadata", {}).get("cwe_id", "?"))
-        hits.setdefault(Path(r["path"]).stem, []).append(cwe)
+    for f in sorted(Path(folder).glob("*.py")):
+        cwes = scan_code(f.read_text(encoding="utf-8"))
+        if cwes:
+            hits[f.stem] = cwes
     return hits
 
 
 def main():
+    versions = {p: version(p) for p in EXPECTED}
+    if versions != EXPECTED:
+        print(f"AVISO: versiones {versions} distintas de las fijadas {EXPECTED}. "
+              "Corre: pip install -r requirements.txt", file=sys.stderr)
     data = [x for x in json.load(open(sys.argv[1], encoding="utf-8")) if x["language"] == "python"]
     repos = sorted({x["repo"] for x in data})
     random.Random(SEED).shuffle(repos)
@@ -41,8 +52,9 @@ def main():
                    "flagged_same_cwe": sum(r["split"] == s and r["same_cwe"] for r in rows)}
                for s in ("dev", "test")}
     Path("results").mkdir(exist_ok=True)
-    Path("results/scan_baseline.json").write_text(json.dumps({"summary": summary, "rows": rows}, indent=1))
-    print(json.dumps(summary, indent=1))
+    Path("results/scan_baseline.json").write_text(
+        json.dumps({"versions": versions, "summary": summary, "rows": rows}, indent=1))
+    print(json.dumps({"versions": versions, **summary}, indent=1))
 
 
 if __name__ == "__main__":

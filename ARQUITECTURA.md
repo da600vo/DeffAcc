@@ -41,26 +41,26 @@ Quién hace cada caja:
 
 Un **parche** es una versión corregida del código. Nuestro sistema **no toca el código del usuario**: genera el parche, lo verifica y lo **entrega como propuesta**. Una persona decide si lo aplica. Aplicarlo solo es una opción futura, y solo para parches verificados.
 
-### 3.2 Ejemplo (ilustrativo, probado con nuestro escáner)
+### 3.2 Ejemplo (ilustrativo, probado con nuestro escáner: ICD, semgrep 1.79.0)
 
-Código original. El escáner lo marca como **CWE-338** (generador aleatorio no criptográfico usado para un token):
+Código original. El escáner lo marca como **CWE-78** (inyección de comandos del sistema operativo):
 
 ```python
-import random
+import os
 
-def new_token():
-    token = random.randint(0, 999999)
-    return token
+def ping(host):
+    os.system("ping -c 1 " + host)
+    return True
 ```
 
 Cuatro respuestas posibles del parcheador, y lo que dice nuestro verificador:
 
 | Parche | Código | ¿El escáner lo marca? | Estado |
 |---|---|---|---|
-| Correcto | `token = secrets.randbelow(1000000)` (con `import secrets`) | No | `fixed` |
-| Trampa: borrar la línea | se quita la línea; `return token` queda roto | **No** | `fake_fix` |
-| Trampa: comentarla | `# token = random.randint(...)` y `token = 4` | **No** | `fake_fix` |
-| No arregló | `random.seed(); token = random.randint(...)` | Sí | `still_insecure` |
+| Correcto | `subprocess.run(["ping", "-c", "1", host], check=False)` (con `import subprocess`) | No | `fixed` |
+| Trampa: borrar la línea | se quita la línea `os.system(...)`; la función ya no hace ping | **No** | `fake_fix` |
+| Trampa: comentarla | `# os.system("ping -c 1 " + host)` | **No** | `fake_fix` |
+| No arregló | `os.system("ping -c 1 " + host.strip())` | Sí | `still_insecure` |
 
 **La lección:** las dos trampas silencian al escáner. Si medimos parches solo con el escáner, una estrategia que no arregla nada parece exitosa. Por eso existe `verify.py`.
 
@@ -85,7 +85,7 @@ Marlon intenta engañar estas reglas en dev. Cada truco que pase se convierte en
 ## 4. Datos y medición
 
 - **Dataset:** CyberSecEval `instruct.json` (PurpleLlama, Meta), solo Python: 351 fragmentos de código real con una línea insegura conocida y su CWE.
-- **División por repositorio, semilla 42:** dev = 115 fragmentos (75 marcados), test = 236 (153 marcados). Se divide por repositorio para que el estilo de un mismo proyecto no aparezca en ambos lados.
+- **División por repositorio, semilla 42:** dev = 115 fragmentos (85 marcados), test = 236 (163 marcados). Se divide por repositorio para que el estilo de un mismo proyecto no aparezca en ambos lados.
 - **Dev** sirve para construir: prompt, reglas anti-trampa. **Test** se corre una sola vez, al final.
 - **Variantes que se comparan:** `noop` (no hacer nada), `delete_line` (borrar la línea marcada) y `gemini` (nuestro parcheador).
 - **Métricas** (sobre los marcados): corrección real (`fixed`), falsa corrección (`fake_fix`), sigue inseguro, sintaxis rota, y segundos por muestra.
@@ -136,7 +136,7 @@ python baseline_patches.py PurpleLlama/CybersecurityBenchmarks/datasets/instruct
 git checkout -b <tu-nombre>
 ```
 
-Debe salir dev 75/115 y test 153/236.
+Debe salir dev 85/115 y test 163/236.
 
 4. Para subir tu trabajo:
 
