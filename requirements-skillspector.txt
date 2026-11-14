@@ -1,0 +1,11 @@
+# NVIDIA SkillSpector, used by /scan (api.py) to detect MALICIOUS skill code.
+# Install it in its OWN environment (needs Python 3.12+), NOT in the API environment:
+# its dependencies could disturb the pinned semgrep in requirements.txt.
+#
+#   pip install uv
+#   uv venv --python 3.12 ~/.venvs/skillspector
+#   uv pip install --python ~/.venvs/skillspector/bin/python -r requirements-skillspector.txt
+#
+# api.py looks for ~/.venvs/skillspector/bin/skillspector (override with SKILLSPECTOR_BIN).
+# Pinned to the commit tested with api.py (SkillSpector v2.12.0).
+skillspector @ git+https://github.com/NVIDIA/skillspector@c81615007d40e86051a302a3cf897f8a05264928
