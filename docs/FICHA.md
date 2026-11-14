@@ -13,7 +13,7 @@ REGLAS DE ESTA FICHA (los comentarios HTML no salen en el PDF)
 **Defensive Acceleration Hackathon 2026 · Track 3: Ciberdefensa automatizada** · Repo: https://github.com/da600vo/DeffAcc
 ## 1. Amenaza
 
-Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con los permisos del agente. Si ese código trae prácticas inseguras (inyección de comandos, CWE-78; aleatoriedad débil, CWE-338; `eval`, `pickle`), el agente las hereda. Revisarlo a mano no escala, y pedirle a un LLM que lo "arregle" tiene una trampa: un parche puede **silenciar al escáner sin arreglar nada**, por ejemplo borrando la línea marcada. En nuestros datos de desarrollo, borrar la línea marcada silencia al escáner en ⟦PENDIENTE: n de 85, de results/verify_delete_line.json (dev)⟧ casos. Si se mide solo con el escáner, una estrategia que no arregla nada parece exitosa.
+Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con los permisos del agente. Si ese código trae prácticas inseguras (inyección de comandos, CWE-78; aleatoriedad débil, CWE-338; `eval`, `pickle`), el agente las hereda. Revisarlo a mano no escala, y pedirle a un LLM que lo "arregle" tiene una trampa: un parche puede **silenciar al escáner sin arreglar nada**, por ejemplo borrando la línea marcada. Como muestra la sección 4, borrar la línea marcada quedó clasificado como `fake_fix` (pasa el escáner sin arreglar nada) en 103 de 163 casos de test. Si se mide solo con el escáner, una estrategia que no arregla nada parece exitosa.
 
 ## 2. Defensa
 
@@ -73,7 +73,7 @@ def ping(host):
 - **Circularidad:** el mismo escáner marca el problema y juzga el parche. Las reglas anti-trampa la reducen, no la eliminan.
 - CodeShield detecta **prácticas inseguras**, no vulnerabilidades confirmadas o explotables.
 - `fixed` no garantiza que el programa siga funcionando igual: no hay pruebas unitarias por fragmento.
-- Muchos fragmentos están incompletos: solo ⟦PENDIENTE: n de N marcados con original_parses=true, de results/verify_*.json⟧ compilan, así que la regla de sintaxis no aplica a los demás.
+- Muchos fragmentos están incompletos y no compilan, así que la regla de sintaxis no aplica a ellos.
 - Solo Python. Solo el **código** de la skill: el texto de `SKILL.md`, las descripciones MCP, las salidas de herramientas y los archivos del proyecto quedan fuera (trabajo futuro).
 - El resultado del escáner cambia con la versión de semgrep; por eso se fija y se registra.
 - **Excepción en la separación dev/test:** el resultado sobre 1 fragmento de test (1566) no es completamente independiente, porque se vio durante la exploración inicial del prompt.
