@@ -1,0 +1,17 @@
+flowchart LR
+  GH["Actualización de una skill<br/>o servidor MCP · webhook de GitHub"]:::ext --> H{"¿Cambió el hash<br/>del código?"}
+  H -- no --> SK["Se omite<br/>ya fue revisado"]:::ok
+  H -- sí --> PIPE["Pipeline Parche Verificado<br/>escanear → parchear → verificar"]:::base
+  PIPE --> FX["Parche propuesto<br/>PR sugerido al mantenedor"]:::ok
+  PIPE --> Q["Altamente sospechoso"]:::bad --> SB["Sandbox aislado<br/>+ paquete de evidencia"]:::bad --> ES["Especialista decide"]:::adrian
+  PIPE -. futuro .-> L["Más lenguajes<br/>CodeShield trae reglas para 8"]:::base
+  PIPE -. futuro .-> TX["Texto de SKILL.md y descripciones MCP<br/>inyección de instrucciones"]:::base
+classDef adrian fill:#dae8fc,stroke:#6c8ebf,color:#000
+classDef david fill:#d5e8d4,stroke:#82b366,color:#000
+classDef antonia fill:#ffe6cc,stroke:#d79b00,color:#000
+classDef leandro fill:#e1d5e7,stroke:#9673a6,color:#000
+classDef marlon fill:#f8cecc,stroke:#b85450,color:#000
+classDef base fill:#f5f5f5,stroke:#666,color:#000
+classDef ext fill:#fff2cc,stroke:#d6b656,color:#000
+classDef ok fill:#c8f0c8,stroke:#2e7d32,color:#000
+classDef bad fill:#ffd0d0,stroke:#c62828,color:#000

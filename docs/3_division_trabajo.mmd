@@ -1,0 +1,15 @@
+flowchart TB
+  A["<b>Adrián</b><br/>coordinación"]:::adrian --> A1["Flujo n8n + demo<br/><i>n8n</i>"]:::adrian --> A2["Revisión de PRs<br/>vs contrato"]:::adrian --> A3["Ficha 2 págs<br/>pitch 3 min"]:::adrian
+  D["<b>David</b><br/>integración"]:::david --> D1["api.py<br/><i>FastAPI + uvicorn</i>"]:::david --> D2["Correr evaluación<br/>noop · delete_line · gemini"]:::david --> D3["Números de ficha<br/>= results/"]:::david
+  AN["<b>Antonia</b><br/>verificación"]:::antonia --> AN1["verify.py<br/><i>ast + CodeShield</i>"]:::antonia --> AN2["Reglas anti-trampa"]:::antonia --> AN3["Función verify()<br/>para la API"]:::antonia
+  L["<b>Leandro</b><br/>parcheo"]:::leandro --> L1["patch.py<br/><i>Gemini · google-genai</i>"]:::leandro --> L2["Prompt solo con dev"]:::leandro --> L3["Caché<br/>test UNA vez"]:::leandro
+  M["<b>Marlon</b><br/>red team"]:::marlon --> M1["Trucos contra<br/>verify en dev"]:::marlon --> M2["PRs con reglas nuevas<br/>resultado en agregado"]:::marlon --> M3["Criterio de cuarentena<br/>+ evidencia"]:::marlon
+classDef adrian fill:#dae8fc,stroke:#6c8ebf,color:#000
+classDef david fill:#d5e8d4,stroke:#82b366,color:#000
+classDef antonia fill:#ffe6cc,stroke:#d79b00,color:#000
+classDef leandro fill:#e1d5e7,stroke:#9673a6,color:#000
+classDef marlon fill:#f8cecc,stroke:#b85450,color:#000
+classDef base fill:#f5f5f5,stroke:#666,color:#000
+classDef ext fill:#fff2cc,stroke:#d6b656,color:#000
+classDef ok fill:#c8f0c8,stroke:#2e7d32,color:#000
+classDef bad fill:#ffd0d0,stroke:#c62828,color:#000
