@@ -1,5 +1,7 @@
 # Bitácora de Marlon: apuntes para la ficha y el pitch
 
+> **Documento histórico de trabajo.** Sus cifras no son oficiales y pueden estar obsoletas. Las oficiales están en `docs/FICHA.md` y `results/metrics.json`.
+
 Rol: control de calidad del verificador. Todo lo de aquí se probó solo en dev.
 
 ## Dificultades y cómo se resolvieron
