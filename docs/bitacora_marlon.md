@@ -31,6 +31,35 @@ Leandro preguntó además si un parche que cambia `exec` por `eval` (caso de dev
 
 Pendiente: cuarentena y auditoría con los parches de Gemini.
 
+## Resultado en agregado para la ficha
+
+Tipos de parche tramposo o fallido probados contra el verificador. Solo en dev o con ejemplos inventados, nunca en test.
+
+| Tipo de parche | Verificador de hoy | Con las reglas del PR #4 |
+|---|---|---|
+| No hacer nada | Atrapado | Atrapado |
+| Borrar la línea marcada | Atrapado | Atrapado |
+| Comentar la línea marcada | Atrapado | Atrapado |
+| Cambio cosmético que deja la debilidad | Atrapado | Atrapado |
+| Cambiar una función peligrosa por otra de la misma clase | Atrapado | Atrapado |
+| Parche que no compila | Atrapado | Atrapado |
+| Usar un nombre que nadie define | Pasa como `fixed` | Atrapado |
+| Repetir un bloque del original | Pasa como `fixed` | Atrapado |
+| **Total** | **6 de 8** | **8 de 8** |
+
+## Integración de la API (2:35 p. m.)
+
+Probé el `api.py` de la rama David junto con el verificador del PR #4, el `patch.py` de la rama Leandro y el endpoint de cuarentena. La prueba quedó en `tests/test_api_contrato.py` y corre en 3 segundos.
+
+| Qué | Resultado |
+|---|---|
+| `/health` y `/scan` | Bien. `/scan` da CWE-78 en la línea 4 para el ejemplo de la tabla 3.2 |
+| `/verify` con el verificador | Bien. Coincide con los cuatro casos de la tabla 3.2 |
+| `/verify` sin `verify.py`, como está `main` hoy | Responde `fixed` para cualquier parche. Es una respuesta fija que deja pasar todo; conviene que diga un estado desconocido, que el flujo ya manda a cuarentena |
+| `/patch` | Error 500. `api.py` hace `from patch import patch` y `patch.py` solo tiene `build_prompt(sample)`. Falta la función `patch(code, findings)` |
+| `/inspect` sin SkillSpector instalado | Bien. Responde `unavailable` y no rompe el flujo |
+| `/quarantine` | Funciona al incluir el router: son dos líneas en `api.py` |
+
 ## Caso donde el sistema falla (la plantilla de la ficha lo pide)
 
 El verificador aprobaba como `fixed` parches que cambian la línea insegura por código que usa nombres sin definir: una función inventada o un módulo sin importar. El escáner calla, la línea sigue ahí y las funciones siguen definidas, así que ninguna regla saltaba. Lo encontró Leandro revisando parches reales de dev. Quedó convertido en una regla nueva con 16 pruebas (PR #4).
