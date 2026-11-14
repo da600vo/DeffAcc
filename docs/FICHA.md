@@ -30,7 +30,7 @@ Un flujo automatizado (n8n + API FastAPI) que, antes de que el agente use una sk
    - reglas anti-trampa → `fake_fix`: desaparece una función o clase; la línea marcada se borra o comenta sin reemplazo equivalente; el parche tiene menos de la mitad de las líneas;
    - si pasa todo → `fixed`.
 4. **Enruta:** aprobado (sin hallazgos), parche propuesto (`fixed`) o cuarentena para un especialista (el resto).
-   ⟦PENDIENTE: dejar esta frase solo si el PR #3 (quarantine.py) está en main⟧ Cada caso en cuarentena sale con una prioridad (P1 si el parche hizo trampa, trajo una debilidad nueva o deja abierta una debilidad del CWE Top 25 de MITRE 2025; P2 el resto) y con un paquete de evidencia: hallazgos, diff, razones, procedencia y los secretos tapados.
+   Cada caso en cuarentena sale con una prioridad (P1 si el parche hizo trampa, trajo una debilidad nueva o deja abierta una debilidad del CWE Top 25 de MITRE 2025; P2 el resto) y con un paquete de evidencia: hallazgos, diff, razones, procedencia y los secretos tapados.
 
 **El parche nunca se aplica solo:** se entrega como propuesta con evidencia (CWE, línea, diff y razones del verificador). El verificador se puso a prueba solo en dev con 8 tipos de parche tramposo o fallido y atrapa 6 (`results/redteam.json`); los dos que pasan están en Límites.
 
