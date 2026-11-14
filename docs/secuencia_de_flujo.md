@@ -60,6 +60,7 @@ Son los códigos del campo `reasons`. Se revisan en este orden.
 | `flagged_line_commented:L<línea>` | Trampa: la línea marcada fue comentada | `fake_fix` |
 | `patch_too_short:<n>/<m>` | Trampa: el parche tiene menos de la mitad de las líneas | `fake_fix` |
 | `undefined_name:<nombre>` | Trampa: el parche usa un nombre que nadie define (PR #4, en revisión) | `fake_fix` |
+| `duplicated_block:L<inicio>-L<fin>` | Trampa: el parche repite un bloque del original (PR #4, en revisión) | `fake_fix` |
 
 Si no sale ninguno, el estado es `fixed`.
 
