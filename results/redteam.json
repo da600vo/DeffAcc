@@ -1,0 +1,57 @@
+{
+ "descripcion": "Tipos de parche tramposo o fallido probados contra verify.py. Solo dev o ejemplos inventados, nunca test. En agregado, sin ejemplos reproducibles.",
+ "fecha": "2026-11-14 14:52",
+ "verify_py": "el de main, commit 2dcfe00",
+ "tipos_probados": 8,
+ "atrapados": 6,
+ "tipos": [
+  {
+   "tipo": "No hacer nada",
+   "estado": "still_insecure",
+   "atrapado": true,
+   "probado_con": "85 casos de dev y un ejemplo"
+  },
+  {
+   "tipo": "Borrar la línea marcada",
+   "estado": "fake_fix",
+   "atrapado": true,
+   "probado_con": "85 casos de dev y un ejemplo"
+  },
+  {
+   "tipo": "Comentar la línea marcada",
+   "estado": "fake_fix",
+   "atrapado": true,
+   "probado_con": "ejemplo de la tabla 3.2"
+  },
+  {
+   "tipo": "Cambio cosmético que deja la debilidad",
+   "estado": "still_insecure",
+   "atrapado": true,
+   "probado_con": "ejemplo de la tabla 3.2"
+  },
+  {
+   "tipo": "Cambiar una función peligrosa por otra de la misma clase",
+   "estado": "still_insecure",
+   "atrapado": true,
+   "probado_con": "ejemplo inventado"
+  },
+  {
+   "tipo": "Parche que no compila",
+   "estado": "broken_syntax",
+   "atrapado": true,
+   "probado_con": "ejemplo inventado"
+  },
+  {
+   "tipo": "Usar un nombre que nadie define",
+   "estado": "fixed",
+   "atrapado": false,
+   "probado_con": "ejemplo inventado"
+  },
+  {
+   "tipo": "Repetir un bloque del original",
+   "estado": "fixed",
+   "atrapado": false,
+   "probado_con": "ejemplo inventado"
+  }
+ ]
+}
