@@ -62,8 +62,8 @@ def ping(host):
 
 | Método | n | `fixed` | `fake_fix` | `still_insecure` | `broken_syntax` |
 |---|---|---|---|---|---|
-| `noop` | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ |
-| `delete_line` | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ |
+| `noop` | 163 | 0 | 0 | 163 | 0 |
+| `delete_line` | 163 | 0 | 103 | 49 | 11 |
 | `gemini` | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ |
 
 **Lectura:** ⟦PENDIENTE: 2–3 frases. Qué fracción de lo que un escáner solo habría contado como "arreglado" atrapa el verificador como `fake_fix`; y cuánto corrige de verdad Gemini frente a las líneas base.⟧
