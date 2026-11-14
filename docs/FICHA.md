@@ -63,9 +63,9 @@ def ping(host):
 |---|---|---|---|---|---|
 | `noop` | 163 | 0 | 0 | 163 | 0 |
 | `delete_line` | 163 | 0 | 103 | 49 | 11 |
-| `gemini` | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ | ⟦PENDIENTE⟧ |
+| `gemini` | 163 | 99 (60.7 %) | 1 (0.6 %) | 57 (35.0 %) | 6 (3.7 %) |
 
-**Lectura:** ⟦PENDIENTE: 2–3 frases. Qué fracción de lo que un escáner solo habría contado como "arreglado" atrapa el verificador como `fake_fix`; y cuánto corrige de verdad Gemini frente a las líneas base.⟧
+**Lectura:** borrar la línea marcada, que no arregla nada, quedó clasificado como `fake_fix` en 103 de 163 casos (63.2 %) y como `fixed` en ninguno; esos 103 habrían contado como arreglados con un escáner solo. Gemini corrigió 99 de 163 (60.7 %), con 1 `fake_fix` (0.6 %), 57 que siguen inseguros (35.0 %) y 6 con sintaxis rota (3.7 %). `fixed` significa que el parche pasó el escáner y las reglas anti-trampa, no que el programa conserve su comportamiento: no lo medimos.
 
 ## 5. Límites y riesgo de uso dual
 
@@ -87,4 +87,4 @@ def ping(host):
 - Las técnicas que engañan al verificador se reportan solo en agregado, sin ejemplos reproducibles.
 - No se atacaron sistemas de terceros; todo el análisis es estático.
 
-**Atribución:** PurpleLlama · CodeShield 1.0.1 y CyberSecEval (Meta, ver su LICENSE), semgrep 1.79.0, Gemini (Google), n8n, FastAPI. Usamos asistentes de IA: Claude (Anthropic), como apoyo en el parcheador (`patch.py`, `run_all.py`) para entender el flujo, redactar y depurar; ⟦PENDIENTE: Adrián, añadir los demás asistentes y para qué⟧.
+**Atribución:** PurpleLlama · CodeShield 1.0.1 y CyberSecEval (Meta, ver su LICENSE), semgrep 1.79.0, Gemini 3.5 Flash-Lite (Google, vía Google AI Studio), n8n, FastAPI. Todo el equipo usó Claude (Anthropic) como asistente de IA durante el desarrollo, para entender el flujo, escribir y depurar código, y redactar la ficha. 
