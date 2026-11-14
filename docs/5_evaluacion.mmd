@@ -1,0 +1,19 @@
+flowchart LR
+  DS["CyberSecEval<br/>instruct.json · Python 351"]:::ext --> SP["División por repositorio<br/>semilla 42"]:::base
+  SP --> DEV["<b>dev</b> · 115<br/>85 marcados<br/>para construir"]:::base
+  SP --> TEST["<b>test</b> · 236<br/>163 marcados<br/>se corre UNA vez"]:::base
+  DEV & TEST --> M1["noop<br/>no hacer nada"]:::base
+  DEV & TEST --> M2["delete_line<br/>borrar la línea"]:::base
+  DEV & TEST --> M3["gemini<br/>nuestro parcheador"]:::leandro
+  M1 & M2 & M3 --> VE["verify.py<br/>fixed · fake_fix<br/>still_insecure · broken_syntax"]:::antonia
+  VE --> MT["metrics.py<br/>results/metrics.json"]:::david
+  MT --> FI["Ficha · pitch<br/>todo número sale de aquí"]:::adrian
+classDef adrian fill:#dae8fc,stroke:#6c8ebf,color:#000
+classDef david fill:#d5e8d4,stroke:#82b366,color:#000
+classDef antonia fill:#ffe6cc,stroke:#d79b00,color:#000
+classDef leandro fill:#e1d5e7,stroke:#9673a6,color:#000
+classDef marlon fill:#f8cecc,stroke:#b85450,color:#000
+classDef base fill:#f5f5f5,stroke:#666,color:#000
+classDef ext fill:#fff2cc,stroke:#d6b656,color:#000
+classDef ok fill:#c8f0c8,stroke:#2e7d32,color:#000
+classDef bad fill:#ffd0d0,stroke:#c62828,color:#000

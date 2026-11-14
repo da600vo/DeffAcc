@@ -1,0 +1,27 @@
+flowchart TD
+  T["<b>1. Llega una skill</b><br/>nueva o actualizada<br/><i>n8n · Webhook / disparador manual</i>"]:::adrian
+  S["<b>2. Escanear</b> · POST /scan<br/>busca prácticas inseguras y su CWE<br/><i>FastAPI → CodeShield + semgrep</i>"]:::base
+  D1{"¿Marcado?"}
+  OK["<b>APROBADO</b><br/>sin hallazgos"]:::ok
+  P["<b>3. Proponer parche</b> · POST /patch<br/>el LLM reescribe el código<br/><i>FastAPI → Gemini · caché en disco</i>"]:::leandro
+  V["<b>4. Verificar</b> · POST /verify<br/>① ¿compila? ② ¿el escáner calla?<br/>③ ¿hizo trampa?<br/><i>FastAPI → ast + CodeShield + reglas propias</i>"]:::antonia
+  D2{"Estado"}
+  FX["<b>PARCHE PROPUESTO</b> · fixed<br/>se entrega, NO se aplica"]:::ok
+  Q["<b>CUARENTENA</b><br/>fake_fix · still_insecure · broken_syntax<br/>→ revisión de especialista"]:::bad
+  R["<b>5. Respuesta con evidencia</b><br/>CWE · línea · diff del parche · razones<br/><i>n8n · Respond to Webhook (JSON)</i>"]:::adrian
+  RT["Red team en dev<br/>parches tramposos → reglas nuevas"]:::marlon
+  T --> S --> D1
+  D1 -- no --> OK --> R
+  D1 -- sí --> P --> V --> D2
+  D2 -- fixed --> FX --> R
+  D2 -- otro --> Q --> R
+  RT -. ataca y refuerza .-> V
+classDef adrian fill:#dae8fc,stroke:#6c8ebf,color:#000
+classDef david fill:#d5e8d4,stroke:#82b366,color:#000
+classDef antonia fill:#ffe6cc,stroke:#d79b00,color:#000
+classDef leandro fill:#e1d5e7,stroke:#9673a6,color:#000
+classDef marlon fill:#f8cecc,stroke:#b85450,color:#000
+classDef base fill:#f5f5f5,stroke:#666,color:#000
+classDef ext fill:#fff2cc,stroke:#d6b656,color:#000
+classDef ok fill:#c8f0c8,stroke:#2e7d32,color:#000
+classDef bad fill:#ffd0d0,stroke:#c62828,color:#000

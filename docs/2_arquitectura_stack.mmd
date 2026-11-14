@@ -1,0 +1,32 @@
+flowchart LR
+  DS["<b>PurpleLlama · Meta</b><br/>CyberSecEval instruct.json<br/>Python: 351 fragmentos"]:::ext
+  subgraph CS["GitHub Codespace · Linux en el navegador"]
+    N8N["<b>n8n</b> · puerto 5678<br/>orquestación y demo<br/>n8n/flujo.json"]:::adrian
+    API["<b>api.py</b> · FastAPI + uvicorn<br/>puerto 8000<br/>/scan /patch /verify /health"]:::david
+    SC["<b>scan_baseline.py</b><br/>ICD de CodeShield<br/>regex + semgrep 1.79.0<br/>división por repo, semilla 42"]:::base
+    PA["<b>patch.py</b><br/>google-genai · clave en .env"]:::leandro
+    VE["<b>verify.py</b><br/>ast + re-escaneo + anti-trampa"]:::antonia
+    FS[("results/ · cache/patches/<br/>salidas versionadas")]:::base
+  end
+  GM["<b>Google AI Studio</b><br/>API de Gemini"]:::ext
+  GH["<b>GitHub</b> · repo privado<br/>ramas por persona + PRs"]:::ext
+  N8N -- HTTP JSON --> API
+  API -- /scan --> SC
+  API -- /patch --> PA
+  API -- /verify --> VE
+  VE -. usa scan_dir .-> SC
+  PA -- API --> GM
+  DS -- datos --> SC
+  SC --> FS
+  PA --> FS
+  VE --> FS
+  FS -- git push / pull --> GH
+classDef adrian fill:#dae8fc,stroke:#6c8ebf,color:#000
+classDef david fill:#d5e8d4,stroke:#82b366,color:#000
+classDef antonia fill:#ffe6cc,stroke:#d79b00,color:#000
+classDef leandro fill:#e1d5e7,stroke:#9673a6,color:#000
+classDef marlon fill:#f8cecc,stroke:#b85450,color:#000
+classDef base fill:#f5f5f5,stroke:#666,color:#000
+classDef ext fill:#fff2cc,stroke:#d6b656,color:#000
+classDef ok fill:#c8f0c8,stroke:#2e7d32,color:#000
+classDef bad fill:#ffd0d0,stroke:#c62828,color:#000
