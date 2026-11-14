@@ -4,6 +4,9 @@ mientras la API real no existe. Solo usa la biblioteca estándar.
 NO es el escáner ni el verificador reales: usa reglas mínimas para el ejemplo
 CWE-78 (os.system). Ningún número de la ficha sale de aquí.
 
+/quarantine sí usa el código real: el criterio P1/P2 y el paquete de evidencia
+de quarantine.py, que tampoco necesita nada fuera de la biblioteca estándar.
+
 Uso:   python n8n/mock_api.py            (escucha en el puerto 8000)
 Parar: pkill -f mock_api.py              (y luego: uvicorn api:app --port 8000)
 
@@ -16,6 +19,10 @@ import json
 import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # quarantine.py está en la raíz
+from quarantine import respond as quarantine_respond  # noqa: E402
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
 
@@ -138,6 +145,8 @@ class Handler(BaseHTTPRequestHandler):
                                              data.get("demo_patch") or "fixed"))
             if self.path == "/verify":
                 return self._send(200, verify(data["original_code"], data["patched_code"]))
+            if self.path == "/quarantine":
+                return self._send(200, quarantine_respond(data))
             self._send(404, {"error": "no existe"})
         except Exception as e:  # la demo no debe caerse por una petición mala
             self._send(400, {"error": str(e)})

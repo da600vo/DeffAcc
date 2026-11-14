@@ -52,6 +52,11 @@ from pydantic import BaseModel
 app = FastAPI(title="CyberElotes API")
 log = logging.getLogger("uvicorn.error")
 
+# Cuarentena: prioridad, criterios y evidencia (quarantine.py). No cambia /scan, /patch ni /verify.
+from quarantine_api import router as quarantine_router  # noqa: E402
+
+app.include_router(quarantine_router)
+
 # Pinned versions: taken from scan_baseline.py when it has them (main), so there is one source of truth.
 try:
     from scan_baseline import EXPECTED as PINNED_VERSIONS
