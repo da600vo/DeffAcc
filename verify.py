@@ -36,6 +36,7 @@ from codeshield.insecure_code_detector import insecure_code_detector as icd
 from codeshield.insecure_code_detector.languages import Language
 
 MIN_LINE_RATIO = 0.5  # el parche debe conservar al menos la mitad de las líneas
+MIN_DUP_BLOCK = 5  # líneas seguidas que deben repetirse para contar como bloque duplicado
 
 
 # ---------------------------------------------------------------------------
@@ -280,6 +281,42 @@ def new_undefined_names(original: str, patched: str) -> list:
 
 
 # ---------------------------------------------------------------------------
+# Regla 4e: bloques del original que el parche repite
+# ---------------------------------------------------------------------------
+def duplicated_blocks(original: str, patched: str) -> list:
+    """Rangos de líneas del parche con MIN_DUP_BLOCK o más líneas seguidas que
+    aparecen más veces en el parche que en el original.
+
+    A veces el LLM devuelve el fragmento con un pedazo pegado dos veces. Se comparan
+    las líneas sin sangría y sin contar las vacías, así que también sirve para scripts
+    sin funciones. Solo cuenta código que ya estaba en el original: un arreglo nuevo
+    aplicado igual en dos sitios no se reporta.
+    """
+    def windows(code):
+        lines = [(n, l.strip()) for n, l in enumerate(code.splitlines(), 1) if l.strip()]
+        found = {}
+        for i in range(len(lines) - MIN_DUP_BLOCK + 1):
+            key = tuple(text for _, text in lines[i:i + MIN_DUP_BLOCK])
+            if len(set(key)) >= 3:  # descarta repeticiones triviales: cierres, líneas iguales
+                found.setdefault(key, []).append(i)
+        return lines, found
+
+    _, orig = windows(original)
+    lines, new = windows(patched)
+    extra = sorted(i for key, starts in new.items() if key in orig
+                   for i in starts[len(orig[key]):])
+    ranges, start, prev = [], None, None
+    for i in extra + [None]:
+        if start is not None and (i is None or i != prev + 1):
+            ranges.append(f"L{lines[start][0]}-L{lines[prev + MIN_DUP_BLOCK - 1][0]}")
+            start = None
+        if i is not None and start is None:
+            start = i
+        prev = i
+    return ranges[:3]
+
+
+# ---------------------------------------------------------------------------
 # Función principal (la que llama la API de David)
 # ---------------------------------------------------------------------------
 def verify(original: str, patched: str,
@@ -329,6 +366,9 @@ def verify(original: str, patched: str,
 
     # 4d. nombres nuevos que nadie define (función inventada o módulo sin importar)
     reasons += [f"undefined_name:{name}" for name in new_undefined_names(original, patched)]
+
+    # 4e. el parche repite un bloque del original
+    reasons += [f"duplicated_block:{r}" for r in duplicated_blocks(original, patched)]
 
     return result("fake_fix" if reasons else "fixed")
 
