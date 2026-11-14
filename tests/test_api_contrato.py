@@ -66,11 +66,11 @@ def test_scan_rejects_other_languages_without_crashing():
 
 
 def test_quarantine_is_mounted_when_available():
-    routes = {getattr(r, "path", "") for r in api.app.routes}
-    if "/quarantine" not in routes:
-        pytest.skip("api.py no incluye quarantine_api.router: son dos líneas")
     r = client.post("/quarantine", json={"original_code": ORIGINAL, "patched_code": TABLA_3_2["fake_fix"],
                                          "findings": [{"cwe": "CWE-78", "line": 4, "rule": "x"}],
                                          "verify": {"status": "fake_fix", "reasons": ["flagged_line_commented:L4"],
                                                     "original_parses": True}})
+    if r.status_code == 404:  # se pregunta llamando: la lista de rutas cambia según la versión de FastAPI
+        pytest.skip("api.py no incluye quarantine_api.router: son dos líneas")
     assert r.status_code == 200 and r.json()["priority"] == "P1"
+    assert [d["stage"] for d in r.json()["detections"]] == ["escaneo", "verificacion", "cuarentena", "cuarentena"]
