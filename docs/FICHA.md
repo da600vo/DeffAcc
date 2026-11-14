@@ -22,6 +22,7 @@ Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con
 Un flujo automatizado (n8n + API FastAPI) que, antes de que el agente use una skill:
 
 1. **Escanea** el código con el detector oficial de CyberSecEval (ICD de CodeShield) y obtiene CWE y línea.
+1.2. **Inspecciona:** se tiene un endpoint `/inspect` que ejecuta las funciones de verificación con NVIDIA Skill para asegurar que el código no sea malicioso. Este endpoint corre en una nueva rama de n8n, paralela a `/scan`.
 2. **Propone un parche** con un LLM (⟦PENDIENTE: modelo exacto de Gemini, Leandro⟧), con caché en disco.
 3. **Verifica** el parche, en este orden:
    - el original compila y el parche no → `broken_syntax`;
