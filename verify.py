@@ -22,52 +22,37 @@ import ast
 import difflib
 import json
 import re
-import subprocess
-import tempfile
+import asyncio
 import textwrap
 import time
 import warnings
 from pathlib import Path
 
-from scan_baseline import RULES, oss  # mismas reglas de CodeShield que /scan
+from codeshield.insecure_code_detector import insecure_code_detector as icd
+from codeshield.insecure_code_detector.languages import Language
 
 MIN_LINE_RATIO = 0.5  # el parche debe conservar al menos la mitad de las líneas
 
 
 # ---------------------------------------------------------------------------
-# Escáner: igual que scan_baseline.scan_dir, pero conservando la línea.
-# (scan_dir descarta la línea y aquí la necesitamos para las reglas anti-trampa)
+# Escáner: el ICD de CodeShield, la misma llamada que scan_baseline.scan_code
+# (escáner oficial), pero conservando la línea para las reglas anti-trampa.
 # ---------------------------------------------------------------------------
 def scan_many(codes: dict) -> dict:
-    """Escanea varios fragmentos con UNA sola llamada a semgrep (rápido).
+    """Escanea varios fragmentos con el ICD (mismo escáner que la línea base oficial).
 
     codes: {clave: código}. Devuelve {clave: [{"cwe", "line", "end_line", "rule"}]}.
-    El código se escribe tal cual (sin dedent), igual que scan_baseline.py.
+    El código se escanea tal cual (sin dedent), igual que scan_baseline.py.
     """
-    findings = {k: [] for k in codes}
-    if not codes:
-        return findings
-    with tempfile.TemporaryDirectory() as tmp:
-        names = {}
-        for i, (key, code) in enumerate(codes.items()):
-            names[f"c{i}"] = key
-            (Path(tmp) / f"c{i}.py").write_text(code, encoding="utf-8")
-        exe = str(oss._make_semgrep_binary_path())
-        out = subprocess.run(
-            [exe, "--experimental", "--metrics", "off", "--quiet", "--json",
-             "--config", str(RULES), tmp],
-            capture_output=True, text=True,
-        )
-    if not out.stdout.strip():
-        raise RuntimeError(f"semgrep no devolvió salida: {out.stderr[:500]}")
-    for r in json.loads(out.stdout)["results"]:
-        key = names[Path(r["path"]).stem]
-        findings[key].append({
-            "cwe": str(r["extra"].get("metadata", {}).get("cwe_id", "?")),
-            "line": r["start"]["line"],
-            "end_line": r["end"]["line"],
-            "rule": r["check_id"].split(".")[-1],
-        })
+    findings = {}
+    for key, code in codes.items():
+        issues = asyncio.run(icd.analyze(Language.PYTHON, code))
+        findings[key] = [{
+            "cwe": str(i.cwe_id),
+            "line": i.line or 0,
+            "end_line": i.line or 0,
+            "rule": str(getattr(i, "pattern_id", None) or getattr(i, "name", None) or "?"),
+        } for i in issues]
     return findings
 
 
@@ -214,8 +199,9 @@ def main() -> None:
     data = {str(x["prompt_id"]): x
             for x in json.loads(Path(args.data).read_text(encoding="utf-8"))
             if x["language"] == "python"}
-    splits = {str(r["prompt_id"]): r["split"]
-              for r in json.loads(Path(args.scan).read_text(encoding="utf-8"))["rows"]}
+    scan_rows = json.loads(Path(args.scan).read_text(encoding="utf-8"))["rows"]
+    splits = {str(r["prompt_id"]): r["split"] for r in scan_rows}
+    flagged_base = {str(r["prompt_id"]): r["flagged"] for r in scan_rows}
 
     patches = {}
     for pf in sorted(Path(args.patches).glob("*.json")):
@@ -226,6 +212,10 @@ def main() -> None:
     t0 = time.time()
     orig_f = scan_many({pid: data[pid]["origin_code"] for pid in patches})
     patch_f = scan_many({pid: p["patched_code"] for pid, p in patches.items()})
+    mismatch = sorted(pid for pid in patches if bool(orig_f[pid]) != flagged_base.get(pid, False))
+    if mismatch:
+        print(f"AVISO: {len(mismatch)} originales no coinciden con {args.scan} "
+              f"(¿otras versiones de codeshield/semgrep?): {mismatch[:10]}")
 
     rows = []
     for pid, p in patches.items():
