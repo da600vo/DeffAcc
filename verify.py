@@ -20,11 +20,15 @@ Todo es análisis estático: NUNCA se ejecuta el código de las muestras.
 import argparse
 import ast
 import difflib
+import io
 import json
+import keyword
 import re
 import asyncio
+import builtins
 import textwrap
 import time
+import tokenize
 import warnings
 from pathlib import Path
 
@@ -135,6 +139,147 @@ def flagged_line_problems(original: str, patched: str, flagged: list) -> list:
 
 
 # ---------------------------------------------------------------------------
+# Regla 4d: nombres nuevos que nadie define
+# (un parche de Gemini puede llamar a una función inventada o usar un módulo sin
+#  importarlo: el escáner calla, la línea sigue ahí, pero el código no puede correr)
+# ---------------------------------------------------------------------------
+_SAFE_NAMES = (set(dir(builtins)) | set(keyword.kwlist) | set(keyword.softkwlist)
+               | {"self", "cls", "__file__", "__class__"}
+               # nombres propios de Python 2, que varios fragmentos del dataset usan
+               | {"unicode", "basestring", "xrange", "raw_input", "long", "unichr",
+                  "reduce", "file", "execfile", "cmp", "buffer", "intern"})
+# Un nombre usado solo como módulo (nombre.algo) también cuenta. Para darle el beneficio
+# de la duda cuando el fragmento no muestra ningún import, poner esto en False.
+REPORT_MODULE_STYLE_NAMES = True
+_OPEN, _CLOSE = ("(", "[", "{"), (")", "]", "}")
+
+
+def _lex(code: str):
+    """Tokens NAME/OP agrupados por línea lógica. Devuelve (líneas, completo).
+
+    Las líneas se leen sin sangría para que un fragmento cortado no falle por
+    indentación (ast.parse solo lee cerca de un tercio de los fragmentos).
+    """
+    src = "\n".join(l.lstrip() for l in code.splitlines()) + "\n"
+    lines, cur, complete = [], [], True
+    try:
+        for t in tokenize.generate_tokens(io.StringIO(src).readline):
+            if t.type in (tokenize.NAME, tokenize.OP):
+                cur.append(t)
+            elif t.type == tokenize.NEWLINE:
+                lines.append(cur)
+                cur = []
+    except tokenize.TokenError as e:
+        complete = "EOF" in str(e)  # cortado al final: sirve lo que se alcanzó a leer
+    except SyntaxError:
+        complete = False
+    if cur:
+        lines.append(cur)
+    return lines, complete
+
+
+def _names(lines: list):
+    """(usados, definidos, usados_como_valor, hay_imports, import_estrella)."""
+    used, bound, strong = set(), set(), set()
+    has_imports = star = False
+    for line in lines:
+        s = [t.string for t in line]
+        n = len(s)
+
+        def is_name(i):
+            return 0 <= i < n and line[i].type == tokenize.NAME and not keyword.iskeyword(s[i])
+
+        if s[:1] in (["import"], ["from"]):
+            has_imports = True
+            part = []
+            for i in range(s.index("import") + 1 if "import" in s else n, n + 1):
+                if i < n and s[i] != ",":
+                    part.append(s[i])
+                    continue
+                names = [x for x in part if x not in _OPEN + _CLOSE]
+                if "*" in names:
+                    star = True
+                elif "as" in names[:-1]:
+                    bound.add(names[names.index("as") + 1])
+                elif names:
+                    bound.add(names[0])
+                part = []
+            continue
+        if s[:1] in (["global"], ["nonlocal"]):
+            bound.update(x for i, x in enumerate(s) if is_name(i))
+            continue
+
+        depth, depths, eq = 0, [], None
+        for i, tok in enumerate(s):
+            if tok in _CLOSE:
+                depth -= 1
+            depths.append(depth)
+            if tok in _OPEN:
+                depth += 1
+            elif (depth == 0 and eq is None and line[i].type == tokenize.OP
+                  and tok.endswith("=") and tok not in ("==", "!=", "<=", ">=", ":=")):
+                eq = i
+
+        for i, tok in enumerate(s):
+            if tok in ("def", "class") and is_name(i + 1):
+                bound.add(s[i + 1])
+            if tok in ("def", "lambda"):  # parámetros
+                j = i + 1
+                while j < n and not (s[j] == ":" and depths[j] == depths[i]):
+                    if is_name(j) and s[j - 1] in ("(", ",", "*", "**", "lambda") \
+                            and depths[j] <= depths[i] + 1 and not (tok == "def" and j == i + 1):
+                        bound.add(s[j])
+                    j += 1
+            elif tok == "for":  # variables del for y de las comprensiones
+                j = i + 1
+                while j < n and not (s[j] == "in" and depths[j] == depths[i]):
+                    if is_name(j) and s[j - 1] != ".":
+                        bound.add(s[j])
+                    j += 1
+            elif tok == "as" and is_name(i + 1):
+                bound.add(s[i + 1])
+            elif is_name(i) and i + 1 < n and s[i + 1] == ":=":
+                bound.add(tok)
+            elif eq is not None and i < eq and is_name(i) and (i == 0 or s[i - 1] != "."):
+                bound.add(tok)  # destino de una asignación
+
+        for i, tok in enumerate(s):
+            if not is_name(i) or (i and s[i - 1] in (".", "def", "class", "as")):
+                continue
+            nxt = s[i + 1] if i + 1 < n else ""
+            if nxt in ("=", ":="):  # asignación simple o argumento con nombre
+                continue
+            used.add(tok)
+            if nxt != ".":
+                strong.add(tok)
+    return used, bound, strong, has_imports, star
+
+
+def new_undefined_names(original: str, patched: str) -> list:
+    """Nombres que el parche usa, que nadie define en el fragmento y que el original no traía.
+
+    Es conservadora: todo nombre que ya aparecía en el original se da por conocido,
+    porque los fragmentos son pedazos de archivos. Lo que se reporta es nuevo: el
+    original no lo usaba, así que nada indica que el archivo lo importe o lo defina.
+    """
+    p_lines, p_ok = _lex(patched)
+    if not p_ok:
+        return []
+    o_lines, o_ok = _lex(original)
+    known = {t.string for line in o_lines for t in line if t.type == tokenize.NAME}
+    if not o_ok:
+        known |= set(re.findall(r"[A-Za-z_]\w*", original))
+    _, _, _, o_imports, o_star = _names(o_lines)
+    used, bound, strong, p_imports, p_star = _names(p_lines)
+    if o_star or p_star:  # from x import *: no se puede saber qué trae
+        return []
+    new = used - bound - known - _SAFE_NAMES
+    if REPORT_MODULE_STYLE_NAMES:
+        return sorted(new)
+    return sorted(name for name in new if name in strong or o_imports or p_imports)
+
+
+# ---------------------------------------------------------------------------
 # Función principal (la que llama la API de David)
 # ---------------------------------------------------------------------------
 def verify(original: str, patched: str,
@@ -181,6 +326,9 @@ def verify(original: str, patched: str,
     n_orig, n_new = len(nonblank(original)), len(nonblank(patched))
     if n_orig and n_new < MIN_LINE_RATIO * n_orig:
         reasons.append(f"patch_too_short:{n_new}/{n_orig}")
+
+    # 4d. nombres nuevos que nadie define (función inventada o módulo sin importar)
+    reasons += [f"undefined_name:{name}" for name in new_undefined_names(original, patched)]
 
     return result("fake_fix" if reasons else "fixed")
 
