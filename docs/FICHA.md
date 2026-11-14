@@ -22,15 +22,14 @@ Los agentes de IA instalan *skills* y servidores MCP cuyo código se ejecuta con
 Un flujo automatizado (n8n + API FastAPI) que, antes de que el agente use una skill:
 
 1. **Escanea** el código con el detector oficial de CyberSecEval (ICD de CodeShield) y obtiene CWE y línea.
-1.2. **Inspecciona:** se tiene un endpoint `/inspect` que ejecuta las funciones de verificación con NVIDIA Skill para asegurar que el código no sea malicioso. Este endpoint corre en una nueva rama de n8n, paralela a `/scan`.
-2. **Propone un parche** con un LLM (⟦PENDIENTE: modelo exacto de Gemini, Leandro⟧), con caché en disco.
-3. **Verifica** el parche, en este orden:
+2. **Inspecciona:** se tiene un endpoint `/inspect` que ejecuta las funciones de verificación con NVIDIA Skill para asegurar que el código no sea malicioso. Este endpoint corre en una nueva rama de n8n, paralela a `/scan`.
+3. **Propone un parche** con Gemini 3.5 Flash-Lite (`gemini-3.5-flash-lite`). El prompt incluye el CWE, la descripción, la línea marcada y el fragmento, exige conservar el comportamiento y permite devolver el código sin cambios si no hay un arreglo legítimo. Todas las respuestas se guardan en disco.
+4. **Verifica** el parche, en este orden:
    - el original compila y el parche no → `broken_syntax`;
    - el escáner lo sigue marcando → `still_insecure`;
    - reglas anti-trampa → `fake_fix`: desaparece una función o clase; la línea marcada se borra o comenta sin reemplazo equivalente; el parche tiene menos de la mitad de las líneas;
    - si pasa todo → `fixed`.
-4. **Enruta:** aprobado (sin hallazgos), parche propuesto (`fixed`) o cuarentena para un especialista (el resto).
-
+5. **Enruta:** aprobado (sin hallazgos), parche propuesto (`fixed`) o cuarentena para un especialista (el resto).
 **El parche nunca se aplica solo:** se entrega como propuesta con evidencia (CWE, línea, diff y razones del verificador). Las reglas anti-trampa se endurecieron con un red team interno que atacó el verificador solo en dev.
 
 Ejemplo (CWE-78):
@@ -51,7 +50,7 @@ def ping(host):
 ## 3. Cómo lo evaluamos
 
 - **Datos:** CyberSecEval `instruct.json` (PurpleLlama, Meta), subconjunto Python: 351 fragmentos con una línea insegura conocida y su CWE.
-- **División por repositorio** (semilla 42), para que el estilo de un proyecto no aparezca en ambos lados: dev 115 fragmentos (85 marcados) para construir prompt y reglas; test 236 (163 marcados), **corrido una sola vez** con el prompt congelado. Fuente: `results/scan_baseline.json`.
+- **División por repositorio** (semilla 42), para que el estilo de un proyecto no aparezca en ambos lados: dev 115 fragmentos (85 marcados) para construir prompt y reglas; test 236 (163 marcados), **corrido una sola vez** con el prompt congelado. Fuente: `results/scan_baseline.json`. Excepción declarada: en una exploración inicial del prompt se inspeccionó a mano 1 fragmento que resultó ser de test (1566), y esas observaciones motivaron reglas de la versión 2 del prompt.
 - **Comparación contra líneas base:** `noop` (no hacer nada) y `delete_line` (borrar la línea marcada), frente a `gemini` (nuestro parcheador), **sobre los mismos fragmentos**.
 - **Métricas** sobre los marcados: corrección real (`fixed`), falsa corrección (`fake_fix`), sigue inseguro, sintaxis rota.
 - **Reproducibilidad:** codeshield 1.0.1 y semgrep 1.79.0 fijados y registrados; el resultado del escáner depende de la versión de semgrep. Un comando por paso en el README. El código de las muestras nunca se ejecuta.
@@ -78,6 +77,9 @@ def ping(host):
 - Muchos fragmentos están incompletos: solo ⟦PENDIENTE: n de N marcados con original_parses=true, de results/verify_*.json⟧ compilan, así que la regla de sintaxis no aplica a los demás.
 - Solo Python. Solo el **código** de la skill: el texto de `SKILL.md`, las descripciones MCP, las salidas de herramientas y los archivos del proyecto quedan fuera (trabajo futuro).
 - El resultado del escáner cambia con la versión de semgrep; por eso se fija y se registra.
+- **Excepción en la separación dev/test:** el resultado sobre 1 fragmento de test (1566) no es completamente independiente, porque se vio durante la exploración inicial del prompt.
+- **Calidad del parche:** en una inspección informal de parches de dev vimos que Gemini a veces cambia una llamada peligrosa por otra equivalente (por ejemplo, `exec` por `eval`) o corrige solo una de varias ocurrencias, y el verificador no siempre lo detecta. No hicimos una auditoría manual sistemática, así que no estimamos qué fracción de los `fixed` es un arreglo legítimo.
+- **Falsos positivos del benchmark:** parte de los fragmentos marcados reciben valores constantes o ya son seguros, así que "arreglarlos" no reduce un riesgo real y el porcentaje de corrección debe leerse con cuidado.
 
 **Riesgo de uso dual**
 
@@ -85,4 +87,4 @@ def ping(host):
 - Las técnicas que engañan al verificador se reportan solo en agregado, sin ejemplos reproducibles.
 - No se atacaron sistemas de terceros; todo el análisis es estático.
 
-**Atribución:** PurpleLlama · CodeShield 1.0.1 y CyberSecEval (Meta, ver su LICENSE), semgrep 1.79.0, Gemini (Google), n8n, FastAPI. Usamos asistentes de IA (⟦PENDIENTE: cuáles y para qué⟧).
+**Atribución:** PurpleLlama · CodeShield 1.0.1 y CyberSecEval (Meta, ver su LICENSE), semgrep 1.79.0, Gemini (Google), n8n, FastAPI. Usamos asistentes de IA: Claude (Anthropic), como apoyo en el parcheador (`patch.py`, `run_all.py`) para entender el flujo, redactar y depurar; ⟦PENDIENTE: Adrián, añadir los demás asistentes y para qué⟧.
