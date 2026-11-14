@@ -34,8 +34,8 @@ Lo que recibe el especialista para decidir sin abrir nada más:
 | `findings` | CWE, línea, regla, descripción y el texto de la línea marcada |
 | `diff` | Diferencia entre el original y el parche (máximo 80 líneas) |
 | `verify` | Estado y razones del verificador |
-| `provenance` | sha256 del original y del parche, versiones del escáner, modelo que propuso el parche, repositorio y archivo de origen |
-| `decision` | Vacío. Lo llena la persona que decide: quién, qué decidió y por qué |
+| `provenance` | sha256 del original y del parche, versiones del escáner, modelo que propuso el parche, repositorio y archivo de origen. Para una skill real: autor, versión y hash anterior |
+| `decision` | Vacío. Lo llena la persona que decide: quién, cuándo, qué decidió y por qué |
 
 Los secretos escritos en el código (CWE-798 y CWE-312) se tapan con `***` en `findings` y en `diff`. `redacted_secrets` dice cuántos se taparon.
 
@@ -56,8 +56,20 @@ Escribe `results/quarantine_gemini.json` con el resumen (`quarantine_rate`, `P1_
 
 ## Límites
 
+- La intención no se ve en el código. Se asoma en la procedencia: quién publicó la skill, de dónde viene y qué cambió entre versiones. Hoy la evidencia guarda el origen y los hashes; comparar versiones queda como trabajo futuro.
 - El criterio mira el tipo de debilidad, no el contexto: un `shell=True` sobre una constante pesa igual que uno sobre entrada del usuario.
 - `new_cwe` depende del mismo escáner que marcó el original.
 - Solo se tapan los secretos de la línea marcada, no todos los del archivo.
 - Los resultados cambian con la versión y el modo del escáner: hoy pasamos de 75 a 85 marcados en dev al cambiar al escáner oficial con semgrep 1.79.0. Por eso la evidencia guarda las versiones: una skill ya revisada debe re-revisarse cuando cambia el escáner, no solo cuando cambia su código.
 - El código sale del equipo cuando se le pide el parche a Gemini. Los [términos de la capa gratuita](https://aistudio.google.com/docs/terms), vigentes desde el 23 de marzo de 2026, dicen: "Do not submit sensitive, confidential, or personal information to the Unpaid Services". Para código real: capa paga o modelo local, y tapar los secretos antes de enviar.
+
+## Fundamentos
+
+| Decisión de diseño | De dónde sale |
+|---|---|
+| La evidencia dice de dónde salió cada pieza: hashes, versiones, modelo y origen | Dignidad de datos (Jaron Lanier): una salida debe poder mostrar "the important source examples that fed into this particular output". NIST SSDF PW.4.1: obtener la procedencia de cada componente |
+| La cola entrega pocas pistas ordenadas, no un volcado | Lanier propone mostrar "the top 12 sources", no todas |
+| La decisión final es de una persona y queda con nombre y fecha | NIST SSDF PW.7.2: revisores expertos para buscar puertas traseras y contenido malicioso |
+| P1 combina el comportamiento del parche con la clase de debilidad | Práctica de seguridad de aplicaciones: no decidir solo por severidad, y definir clases que se arreglan de inmediato, como la inyección |
+| El verificador también se audita, a ciegas y por muestreo (`docs/auditoria.md`) | Control de calidad: todo inspector tiene una probabilidad de falso rechazo y otra de falsa aceptación, y se miden |
+| Las líneas base son parches falsos sembrados que el verificador debe atrapar | Pruebas de mutación: un mutante que sobrevive prueba que nadie lo habría notado |

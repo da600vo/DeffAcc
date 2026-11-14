@@ -145,8 +145,8 @@ def evidence(original: str, patched: str, findings: list, verify_result: dict,
             "patch_model": model,
             "origin": origin,
         },
-        # La decisión es de una persona y queda con su nombre.
-        "decision": {"by": None, "action": None, "note": None},
+        # La decisión es de una persona y queda con su nombre y su fecha.
+        "decision": {"by": None, "at": None, "action": None, "note": None},
     }
 
 

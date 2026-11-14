@@ -1,5 +1,5 @@
 """Pruebas de quarantine.py. Corren con pytest o directo: python tests/test_quarantine.py
-Los ejemplos son inventados o salen de ARQUITECTURA.md 3.2: no usan muestras del dataset."""
+Los ejemplos son inventados: no usan muestras del dataset."""
 import hashlib
 import json
 import sys
@@ -76,7 +76,7 @@ def test_evidence_has_provenance_diff_and_empty_human_decision():
     assert any(l.startswith("-") and "random.randint" in l for l in ev["diff"])
     assert any(l.startswith("+") and "secrets.randbelow" in l for l in ev["diff"])
     assert ev["verify"] == VERIFY_OK
-    assert ev["decision"] == {"by": None, "action": None, "note": None}
+    assert ev["decision"] == {"by": None, "at": None, "action": None, "note": None}
 
 
 def test_evidence_never_leaks_a_hardcoded_secret():
