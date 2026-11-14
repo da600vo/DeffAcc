@@ -23,6 +23,7 @@ Leandro preguntó además si un parche que cambia `exec` por `eval` (caso de dev
 |---|---|
 | `noop` | 85 de 85 `still_insecure` |
 | `delete_line` | 54 `fake_fix`, 25 `still_insecure`, 6 `broken_syntax`, 0 `fixed` |
+| Borrar la línea marcada calla al escáner | En 57 de 85 casos. El verificador no deja pasar ninguno: 54 `fake_fix` y 3 `broken_syntax` |
 | Tabla 3.2 de la arquitectura | Pasan las 8 pruebas |
 | Cuarentena con `noop` | 53 P1 y 32 P2 |
 | Cuarentena con `delete_line` | 77 P1 y 8 P2 |
